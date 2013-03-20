@@ -5,6 +5,8 @@
 package businessLogic;
 
 import gui.UiAdministrator;
+import gui.UiCadruDidactic;
+import gui.UiDirector;
 import gui.UiPublic;
 import persistence.RepositoryBD;
 
@@ -36,14 +38,12 @@ public class Controller {
                 return true;
             }
             case 'D': {
-                throw new RuntimeException("Director Not yet Implemented");
-//                UiDirector.getInstance().reOpen(user);
-//                return true;
+                UiDirector.getInstance().reOpen(user);
+                return true;
             }
             case 'C': {
-                throw new RuntimeException("CadruDidactic Not yet Implemented");
-//                UiCadruDidactic.getInstance().reOpen(user);
-//                return true;
+                UiCadruDidactic.getInstance().reOpen(user);
+                return true;
             }
             default: {
                 return false;
