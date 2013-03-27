@@ -11,7 +11,7 @@ import gui.UiPublic;
 import persistence.RepositoryBD;
 
 /**
- *
+ * Test pentru commit
  * @author S7eve
  */
 public class Controller {
