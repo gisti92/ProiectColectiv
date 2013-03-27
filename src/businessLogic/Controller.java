@@ -14,6 +14,7 @@ import persistence.RepositoryBD;
  *
  * @author S7eve
  */
+//Test commit Andreea
 public class Controller {
 
     private static Controller instance = null ;
