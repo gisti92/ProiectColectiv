@@ -1,9 +1,6 @@
 /*
  * To change this template, choose Tools | Templates
- * and open th
- 
- 
- ////fdsfsdfsd/fsd/f//  ISTIIIIIII ROMANIA UNGARIA 2-0 template in the editor.
+ * and open the template in the editor.
  */
 package start;
 
