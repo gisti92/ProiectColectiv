@@ -12,47 +12,52 @@ import persistence.RepositoryBD;
 
 /**
  * Test pentru commit
+ * 
  * @author S7eve
  */
 public class Controller {
 
-    private static Controller instance = null ;
-    private RepositoryBD rep = RepositoryBD.getInstance();
+  private static Controller instance = null;
+  private RepositoryBD rep = RepositoryBD.getInstance();
 
-    private Controller() {
-    }
+  private Controller() {
+  }
 
-    public static Controller getInstance() {
-    	if (instance==null){
-    		instance= new Controller();
-    	}
-        return instance;
+  public static Controller getInstance() {
+    if (instance == null) {
+      instance = new Controller();
     }
+    return instance;
+  }
 
-    public boolean authentication(String user, char[] pass) throws Exception {
-        char act;
-        act = rep.getPermission(user, pass);
-        switch (act) {
-            case 'A': {
-                UiAdministrator.getInstance().reOpen(user);
-                return true;
-            }
-            case 'D': {
-                UiDirector.getInstance().reOpen(user);
-                return true;
-            }
-            case 'C': {
-                UiCadruDidactic.getInstance().reOpen(user);
-                return true;
-            }
-            default: {
-                return false;
-            }
-        }
+  public boolean authentication(String user, char[] pass) throws Exception {
+    char act;
+    act = rep.getPermission(user, pass);
+    switch (act) {
+    case 'A': {
+      UiAdministrator.getInstance().reOpen(user);
+      return true;
     }
+    case 'D': {
+      UiDirector.getInstance().reOpen(user);
+      return true;
+    }
+    case 'C': {
+      UiCadruDidactic.getInstance().reOpen(user);
+      return true;
+    }
+    default: {
+      return false;
+    }
+    }
+  }
 
-    public boolean loginAsPublic() {
-        UiPublic.getInstance().reOpen("Publicul");
-        return true;
-    }
+  public boolean loginAsPublic() {
+    UiPublic.getInstance().reOpen("Publicul");
+    return true;
+  }
+
+  public boolean importOrar(String file) {
+    return rep.importOrar(file);
+  }
 }

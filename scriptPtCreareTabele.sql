@@ -122,7 +122,16 @@ CREATE PROCEDURE creareTabele AS
 	)
 
 	--************************************ Alte_Activitati_CD **************************************************
-	CREATE TABLE Alte_Activitati_CD(		Id_Cadru_Didactic  INT PRIMARY KEY REFERENCES Cadre_Didactice(Id_Cadru_Didactic), 		Preg_Admitere INT NOT NULL, 		Comisii_absolvire INT NOT NULL, 		Consultatii INT NOT NULL,		Examene INT NOT NULL, 		Indr_lucr_disert INT NOT NULL, 		Indr_lucr_lic INT NOT NULL, 		Indr_proiect INT NOT NULL, 		Lucr_control INT NOT NULL, 
+	CREATE TABLE Alte_Activitati_CD(
+		Id_Cadru_Didactic  INT PRIMARY KEY REFERENCES Cadre_Didactice(Id_Cadru_Didactic), 
+		Preg_Admitere INT NOT NULL, 
+		Comisii_absolvire INT NOT NULL, 
+		Consultatii INT NOT NULL,
+		Examene INT NOT NULL, 
+		Indr_lucr_disert INT NOT NULL, 
+		Indr_lucr_lic INT NOT NULL, 
+		Indr_proiect INT NOT NULL, 
+		Lucr_control INT NOT NULL, 
 		Seminarii_cerc  INT NOT NULL
 	)
 
@@ -133,10 +142,17 @@ CREATE PROCEDURE creareTabele AS
 		ora_sfarsit SMALLINT, 
 		frecventa SMALLINT, 
 		Id_Disciplina INT REFERENCES Discipline(Id_Disciplina),
+		tip VARCHAR(1),
 		Id_Cadru_Didactic INT REFERENCES Cadre_Didactice(Id_Cadru_Didactic), 
 		Id_Sala INT REFERENCES Sali(Id_Sala), 
 		Id_Formatie INT REFERENCES Formatii(Id_Formatie),
-		CONSTRAINT check_ziua_orar CHECK (ziua='Luni' OR ziua='Marti' OR ziua='Miercuri' OR ziua='Joi' OR ziua='Vineri' OR ziua='Sambata' OR ziua='Duminica')
+		CONSTRAINT check_orar_unique UNIQUE (ziua,ora_inceput,frecventa,Id_Cadru_Didactic,Id_Sala,Id_Formatie),
+ 		CONSTRAINT check_ora_inceput_orar CHECK (ora_inceput >= 8  and ora_inceput <= 18),
+		CONSTRAINT check_ora_sfarsit_orar CHECK (ora_sfarsit >= 10  and ora_sfarsit <= 20),
+		CONSTRAINT check_frecventa_orar CHECK (frecventa in (0,1,2)),
+		CONSTRAINT check_ziua_orar CHECK (ziua in ('Luni','Marti','Miercuri','Joi','Vineri','Sambata','Duminica')),
+		CONSTRAINT check_tipOra_orar CHECK (tip in ('L','S','C'))
+		
 	)
 	SET NoCount OFF
 GO
@@ -201,3 +217,17 @@ select * from Formatii
 
 --EXEC stergeTabele
 EXEC creareTabele
+
+
+/*
+--test pentru adaugare in orar
+insert into Cadre_Didactice values('Lect','lectblabla','Gereb Istvan','functie','tit');
+
+insert into Discipline values('disciplina1');
+
+insert into Sali values ('sala1',78);
+
+insert into Sectii values ('Informatica');
+
+EXEC adaugaFormatie 1,2,821,1
+*/
