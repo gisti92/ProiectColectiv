@@ -24,6 +24,8 @@ public class LoginPage extends javax.swing.JFrame {
     private LoginPage() {
         this.contr = Controller.getInstance();
         initComponents();
+        setLocationRelativeTo(null);
+        
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

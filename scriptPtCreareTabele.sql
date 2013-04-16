@@ -215,7 +215,7 @@ select * from Formatii
 */
 
 
---EXEC stergeTabele
+EXEC stergeTabele
 EXEC creareTabele
 
 
