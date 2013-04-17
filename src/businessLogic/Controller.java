@@ -8,6 +8,13 @@ import gui.UiAdministrator;
 import gui.UiCadruDidactic;
 import gui.UiDirector;
 import gui.UiPublic;
+import gui.tableModels.ResurseUmaneTM;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import model.Cadru_Didactic;
 import persistence.RepositoryBD;
 
 /**
@@ -19,8 +26,9 @@ public class Controller {
 
     private static Controller instance = null ;
     private RepositoryBD rep = RepositoryBD.getInstance();
-
-    private Controller() {
+    private ResurseUmaneTM resurseUmaneTM = new ResurseUmaneTM ();
+    
+    private Controller() {        
     }
 
     public static Controller getInstance() {
@@ -56,4 +64,18 @@ public class Controller {
         UiPublic.getInstance().reOpen("Publicul");
         return true;
     }
+
+    public AbstractTableModel getAndRefreshResurseUmaneTM() throws Exception {
+        List<Cadru_Didactic> list=null;
+        try {
+            list = rep.getCadreDidactice();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new Exception("Eroare la afisare informatii Resurse Umane! Contactati administratorul de sistem");
+        }
+        resurseUmaneTM.setList(list);
+        return resurseUmaneTM;
+    }
+    
+    
 }

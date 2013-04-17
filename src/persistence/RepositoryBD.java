@@ -11,7 +11,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
+import model.Cadru_Didactic;
 
 /**
  *
@@ -73,6 +77,42 @@ public class RepositoryBD {
             } else {
                 return 'R';
             }
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (myConnection != null) {
+                    myConnection.close();
+                }
+            } catch (SQLException e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public List<Cadru_Didactic> getCadreDidactice() throws Exception {
+        myConnection = getConnection();
+        ResultSet rs = null;
+        List<Cadru_Didactic> list = new LinkedList<Cadru_Didactic>();
+        try {
+            PreparedStatement statement = myConnection.prepareStatement("SELECT * FROM Cadre_Didactice");
+            rs = statement.executeQuery();
+
+            
+            while (rs.next()) {
+               int id= rs.getInt(1);
+               String pozitia = rs.getString(2);
+               String den_post = rs.getString(3);
+               String nume = rs.getString(4);
+               String functia = rs.getString(5);
+               String tit_vac = rs.getString(6);
+               Cadru_Didactic cadruDidactic = new Cadru_Didactic(id, pozitia, den_post, nume, functia, tit_vac);
+               list.add(cadruDidactic);
+            }
+            return list;
         } catch (SQLException e) {
             throw new Exception(e.getMessage());
         } finally {

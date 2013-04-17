@@ -31,13 +31,12 @@ public class UiPublic extends javax.swing.JFrame {
                 exit();
             }
         });
-        
+        setLocationRelativeTo(null);
     }
     
     public static UiPublic getInstance() {
         if (instance == null) {
                     instance = new UiPublic();
-                    instance.setLocation(400, 300);
         }
         return instance;
     }
