@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import businessLogic.Controller;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +28,7 @@ public class UiAdministrator extends javax.swing.JFrame {
         contr = Controller.getInstance();
         initComponents();
         setLocationRelativeTo(null);
-        
+
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -157,15 +158,20 @@ public class UiAdministrator extends javax.swing.JFrame {
 
     private void btnImportaOrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportaOrarActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(null);
+        fileChooser.setDialogTitle("Selectati fisierul care contine orarul");
+        int result = fileChooser.showOpenDialog(this);
         switch (result) {
             case JFileChooser.APPROVE_OPTION:
                 File curFile = fileChooser.getSelectedFile();
                 String fileName = curFile.getAbsolutePath();
-                contr.importOrar(fileName);
+                if (contr.importOrar(fileName)){
+                    JOptionPane.showMessageDialog(this, "Importare incheiata cu succes", "Succes", JOptionPane.INFORMATION_MESSAGE);
+                }else {
+                    JOptionPane.showMessageDialog(this, "Importare nereusita! ", "Eroare", JOptionPane.ERROR_MESSAGE);
+                }
                 break;
             case JFileChooser.ERROR_OPTION:
-                System.out.println("Error at choosing file");
+                System.out.println("Eroare la selectare fisier");
                 break;
         }
     }//GEN-LAST:event_btnImportaOrarActionPerformed
@@ -175,7 +181,26 @@ public class UiAdministrator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnImportaStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportaStateActionPerformed
-        showNotYetSupportedDialog();
+        JFileChooser fileChooser = new JFileChooser();
+
+        fileChooser.setDialogTitle("Selectati fisierul care contine statele de functii");
+        int result = fileChooser.showOpenDialog(this);
+        switch (result) {
+            case JFileChooser.APPROVE_OPTION:
+                File curFile = fileChooser.getSelectedFile();
+                String fileName = curFile.getAbsolutePath();
+                if (contr.importStateDeFunctii(fileName)){
+                    JOptionPane.showMessageDialog(this, "Importare incheiata cu succes", "Succes", JOptionPane.INFORMATION_MESSAGE);
+                }else {
+                    JOptionPane.showMessageDialog(this, "Importare nereusita! ", "Eroare", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                break;
+            case JFileChooser.ERROR_OPTION:
+                System.out.println("Eroare la selectare fisier");
+                break;
+        }
+
     }//GEN-LAST:event_btnImportaStateActionPerformed
 
     private void btnInregResUmaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResUmaneActionPerformed

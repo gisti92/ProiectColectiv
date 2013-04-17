@@ -4,6 +4,7 @@
  */
 package start;
 
+import businessLogic.Controller;
 import gui.LoginPage;
 import javax.swing.JOptionPane;
 
@@ -39,7 +40,7 @@ public class StartApp {
             java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
