@@ -171,4 +171,145 @@ public class RepositoryBD {
     p.setInt(9, codFormatie);
     p.executeUpdate();
   }
+
+  public boolean importStateDeFunctii(String file) {
+    try {
+      BufferedReader readFromFile = new BufferedReader(new FileReader(file));
+      String lineFromFile;
+      Integer idCadruDidactic = 0;
+      while ((lineFromFile = readFromFile.readLine()) != null) {
+        String[] lineSplit = lineFromFile.split("\\,|;");
+        if (lineFromFile.length() == 5) {
+          idCadruDidactic = parseAndAddLineToCadruDidacticeDB(lineSplit);
+        }
+        else {
+          if (lineFromFile.length() == 9) {
+            parseAndAddLineToStateDB(idCadruDidactic, lineSplit);
+          }
+          else {
+            if (lineFromFile.length() == 1) {// TODO decide on a separator
+              lineFromFile = readFromFile.readLine();
+              parseAndAddAlteActivitatiCDToDB(idCadruDidactic, lineSplit);
+              idCadruDidactic = 0;
+            }
+            else {
+              readFromFile.close();
+              throw new FieldValidationException("Invalid field numbers");
+            }
+          }
+        }
+      }
+      readFromFile.close();
+    }
+    // TODO throw messages to UI
+    catch (FieldValidationException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
+    catch (NumberFormatException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
+    catch (IOException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
+    return true;
+  }
+
+  private void parseAndAddAlteActivitatiCDToDB(Integer idCadruDidactic, String[] lineSplit)
+      throws FieldValidationException, NumberFormatException, SQLException {
+    if (idCadruDidactic == 0) {
+      throw new FieldValidationException("Field idCadruDidactic incorrect");
+    }
+
+    Integer pregAdmitere = Integer.parseInt(lineSplit[1]);
+    Integer comisiiAbsolvire = Integer.parseInt(lineSplit[2]);
+    Integer consultatii = Integer.parseInt(lineSplit[3]);
+    Integer examene = Integer.parseInt(lineSplit[4]);
+    Integer indrLucrDisert = Integer.parseInt(lineSplit[5]);
+    Integer indrLucrLic = Integer.parseInt(lineSplit[6]);
+    Integer indrProiect = Integer.parseInt(lineSplit[7]);
+    Integer lucrControl = Integer.parseInt(lineSplit[8]);
+    Integer seminariiCerc = Integer.parseInt(lineSplit[9]);
+
+    addDataToAlteActivitatiCDToDB(idCadruDidactic, pregAdmitere, comisiiAbsolvire, consultatii, examene,
+        indrLucrDisert, indrLucrLic, indrProiect, lucrControl, seminariiCerc);
+  }
+
+  private void addDataToAlteActivitatiCDToDB(Integer... toAddToDb) throws SQLException {
+    Connection conn = getConnection();
+
+    PreparedStatement p = conn.prepareStatement("Insert into Alte_Activitati_CD values(?,?,?,?,?,?,?,?,?,?)");
+    p.setInt(1, toAddToDb[0]);
+    p.setInt(2, toAddToDb[1]);
+    p.setInt(3, toAddToDb[2]);
+    p.setInt(4, toAddToDb[3]);
+    p.setInt(5, toAddToDb[4]);
+    p.setInt(6, toAddToDb[5]);
+    p.setInt(7, toAddToDb[6]);
+    p.setInt(8, toAddToDb[7]);
+    p.setInt(9, toAddToDb[8]);
+    p.setInt(10, toAddToDb[9]);
+    p.executeUpdate();
+  }
+
+  private Integer parseAndAddLineToCadruDidacticeDB(String[] lineSplit) throws SQLException {
+    Connection conn = getConnection();
+
+    PreparedStatement p = conn.prepareStatement("Insert into Cadre_Didactice values(?,?,?,?,?)");
+    p.setString(1, lineSplit[0]);
+    p.setString(2, lineSplit[1]);
+    p.setString(3, lineSplit[2]);
+    p.setString(4, lineSplit[3]);
+    p.setString(5, lineSplit[4]);
+    p.executeUpdate();
+
+    p = conn.prepareStatement("Select Id_CadruDidactic from Cadre_Didactice where nume=" + lineSplit[2]
+        + " and pozitia=" + lineSplit[0] + " and den_post=" + lineSplit[1] + " and functia=" + lineSplit[3]
+        + " and tit_vac=" + lineSplit[4]);
+
+    return p.executeQuery().getInt(1);
+  }
+
+  private void parseAndAddLineToStateDB(Integer idCadruDidactic, String[] lineSplit) throws FieldValidationException,
+      NumberFormatException, SQLException {
+
+    if (idCadruDidactic == 0) {
+      throw new FieldValidationException("Field idCadruDidactic incorrect");
+    }
+
+    Integer idDisciplina = Integer.parseInt(lineSplit[1]);
+    Integer idSectia = Integer.parseInt(lineSplit[2]);
+    Integer an = Integer.parseInt(lineSplit[3]);
+    Integer oreC1 = Integer.parseInt(lineSplit[4]);
+    Integer oreS1 = Integer.parseInt(lineSplit[5]);
+    Integer oreL1 = Integer.parseInt(lineSplit[6]);
+    Integer oreC2 = Integer.parseInt(lineSplit[7]);
+    Integer oreS2 = Integer.parseInt(lineSplit[8]);
+    Integer oreL2 = Integer.parseInt(lineSplit[9]);
+
+    addDataToStateDB(idCadruDidactic, idDisciplina, idSectia, an, oreC1, oreS1, oreL1, oreC2, oreS2, oreL2);
+  }
+
+  private void addDataToStateDB(Integer... toAddToDb) throws SQLException {
+    Connection conn = getConnection();
+
+    PreparedStatement p = conn.prepareStatement("Insert into State_de_Functii values(?,?,?,?,?,?,?,?,?,?)");
+    p.setInt(1, toAddToDb[0]);
+    p.setInt(2, toAddToDb[1]);
+    p.setInt(3, toAddToDb[2]);
+    p.setInt(4, toAddToDb[3]);
+    p.setInt(5, toAddToDb[4]);
+    p.setInt(6, toAddToDb[5]);
+    p.setInt(7, toAddToDb[6]);
+    p.setInt(8, toAddToDb[7]);
+    p.setInt(9, toAddToDb[8]);
+    p.setInt(10, toAddToDb[9]);
+    p.executeUpdate();
+  }
 }

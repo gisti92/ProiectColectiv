@@ -60,4 +60,8 @@ public class Controller {
   public boolean importOrar(String file) {
     return rep.importOrar(file);
   }
+
+  public boolean importStateDeFunctii(String file) {
+    return rep.importStateDeFunctii(file);
+  }
 }
