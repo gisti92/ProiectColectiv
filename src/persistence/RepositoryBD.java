@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import model.Cadru_Didactic;
+import model.Echipamente;
+import model.Sali;
 
 /**
  *
@@ -34,9 +36,9 @@ public class RepositoryBD {
     }
 
     public static RepositoryBD getInstance() {
-    	if (instance==null){
-    		instance= new RepositoryBD();
-    	}
+        if (instance == null) {
+            instance = new RepositoryBD();
+        }
         return instance;
     }
 
@@ -101,16 +103,81 @@ public class RepositoryBD {
             PreparedStatement statement = myConnection.prepareStatement("SELECT * FROM Cadre_Didactice");
             rs = statement.executeQuery();
 
-            
+
             while (rs.next()) {
-               int id= rs.getInt(1);
-               String pozitia = rs.getString(2);
-               String den_post = rs.getString(3);
-               String nume = rs.getString(4);
-               String functia = rs.getString(5);
-               String tit_vac = rs.getString(6);
-               Cadru_Didactic cadruDidactic = new Cadru_Didactic(id, pozitia, den_post, nume, functia, tit_vac);
-               list.add(cadruDidactic);
+                int id = rs.getInt(1);
+                String pozitia = rs.getString(2);
+                String den_post = rs.getString(3);
+                String nume = rs.getString(4);
+                String functia = rs.getString(5);
+                String tit_vac = rs.getString(6);
+                Cadru_Didactic cadruDidactic = new Cadru_Didactic(id, pozitia, den_post, nume, functia, tit_vac);
+                list.add(cadruDidactic);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (myConnection != null) {
+                    myConnection.close();
+                }
+            } catch (SQLException e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public List<Sali> getSali() throws Exception {
+        myConnection = getConnection();
+        ResultSet rs = null;
+        List<Sali> list = new LinkedList<Sali>();
+        try {
+            PreparedStatement statement = myConnection.prepareStatement("SELECT * FROM Sali");
+            rs = statement.executeQuery();
+
+
+            while (rs.next()) {
+                int Id_Sala = rs.getInt(1);
+                String denumire = rs.getString(2);
+                int capacitate = rs.getInt(3);
+                Sali sali = new Sali(Id_Sala, denumire, capacitate);
+                list.add(sali);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (myConnection != null) {
+                    myConnection.close();
+                }
+            } catch (SQLException e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+    }
+
+    public List<Echipamente> getEchipamente() throws Exception {
+        myConnection = getConnection();
+        ResultSet rs = null;
+        List<Echipamente> list = new LinkedList<Echipamente>();
+        try {
+            PreparedStatement statement = myConnection.prepareStatement("SELECT * FROM Echipamente");
+            rs = statement.executeQuery();
+
+
+            while (rs.next()) {
+                int Id_Echipament = rs.getInt(1);
+                String denumire = rs.getString(2);
+                Echipamente echipamente = new Echipamente(Id_Echipament, denumire);
+                list.add(echipamente);
             }
             return list;
         } catch (SQLException e) {

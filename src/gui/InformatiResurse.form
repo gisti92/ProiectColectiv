@@ -64,13 +64,16 @@
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
-            <StringItem index="0" value="....Alegeti ce informatii vreti sa aflati"/>
-            <StringItem index="1" value="Informa&#x163;ii despre resursele umane &#x15f;i logistice ale departamentului"/>
+            <StringItem index="0" value="...Alegeti informatiile pe care doriti sa le obtineti..."/>
+            <StringItem index="1" value="Informa&#x163;ii despre resursele umane ale departamentului"/>
             <StringItem index="2" value="Informatii despre salile departamentului"/>
             <StringItem index="3" value="Informatii despre echipamentele departamentului"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

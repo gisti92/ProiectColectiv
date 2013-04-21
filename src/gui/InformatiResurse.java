@@ -47,6 +47,12 @@ public class InformatiResurse extends javax.swing.JDialog {
                 case 1:
                     tabelResurse.setModel(contr.getAndRefreshResurseUmaneTM());
                     break;
+                case 2:
+                    tabelResurse.setModel(contr.getAndRefreshResurseLogisticeSaliTM());
+                    break;
+                case 3:
+                    tabelResurse.setModel(contr.getAndRefreshResurseLogisticeEchipamenteTM());
+                    break;
                 //TODO adauga restul
             }
         } catch (Exception ex) {
@@ -78,7 +84,12 @@ public class InformatiResurse extends javax.swing.JDialog {
             }
         });
 
-        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "....Alegeti ce informatii vreti sa aflati", "Informaţii despre resursele umane şi logistice ale departamentului", "Informatii despre salile departamentului", "Informatii despre echipamentele departamentului" }));
+        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "...Alegeti informatiile pe care doriti sa le obtineti...", "Informaţii despre resursele umane ale departamentului", "Informatii despre salile departamentului", "Informatii despre echipamentele departamentului" }));
+        comboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxActionPerformed(evt);
+            }
+        });
 
         tabelResurse.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -125,6 +136,11 @@ public class InformatiResurse extends javax.swing.JDialog {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JComboBox comboBox;
