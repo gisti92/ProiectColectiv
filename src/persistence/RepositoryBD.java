@@ -12,7 +12,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Cadru_Didactic;
 
 import validation.FieldValidationException;
 
@@ -170,7 +175,8 @@ public class RepositoryBD {
             while ((lineFromFile = readFromFile.readLine()) != null) {
                 String[] lineSplit = lineFromFile.split("\\,|;");
                 if (lineSplit.length == 5) {
-                    idCadruDidactic = parseAndAddLineToCadruDidacticeDB(lineSplit);
+                    Cadru_Didactic cd = parseLineToCadruDidactic(lineSplit);
+                    idCadruDidactic = adaugaCadruDidactic(cd);
                 } else if (lineSplit.length == 9) {
                     parseAndAddLineToStateDB(idCadruDidactic, lineSplit);
                 } else if (lineSplit.length == 1) {// TODO decide on a separator
@@ -230,7 +236,7 @@ public class RepositoryBD {
     }
 
     private void addDataToAlteActivitatiCDToDB(int idCadruDidactic, int pregAdmitere, int comisiiAbsolvire, int consultatii, int examene,
-                int indrLucrDisert, int indrLucrLic, int indrProiect, int lucrControl, int seminariiCerc) throws SQLException {
+            int indrLucrDisert, int indrLucrLic, int indrProiect, int lucrControl, int seminariiCerc) throws SQLException {
         Connection conn = getConnection();
 
         PreparedStatement p = conn.prepareStatement("Insert into Alte_Activitati_CD values(?,?,?,?,?,?,?,?,?,?)");
@@ -247,26 +253,8 @@ public class RepositoryBD {
         p.executeUpdate();
     }
 
-    private Integer parseAndAddLineToCadruDidacticeDB(String[] lineSplit) throws SQLException {
-        Connection conn = getConnection();
-
-        PreparedStatement p = conn.prepareStatement("Insert into Cadre_Didactice values(?,?,?,?,?)");
-        p.setString(1, lineSplit[0]);
-        p.setString(2, lineSplit[1]);
-        p.setString(3, lineSplit[2]);
-        p.setString(4, lineSplit[3]);
-        p.setString(5, lineSplit[4]);
-        p.executeUpdate();
-
-        p = conn.prepareStatement("Select Id_Cadru_Didactic from Cadre_Didactice where pozitia=? and den_post=? and nume=? and functia=? and tit_vac=?");
-        p.setString(1, lineSplit[0]);
-        p.setString(2, lineSplit[1]);
-        p.setString(3, lineSplit[2]);
-        p.setString(4, lineSplit[3]);
-        p.setString(5, lineSplit[4]);
-        ResultSet rs = p.executeQuery();
-        rs.next();
-        return rs.getInt(1);
+    private Cadru_Didactic parseLineToCadruDidactic(String[] lineSplit) {
+        return new Cadru_Didactic(0, lineSplit[0], lineSplit[1], lineSplit[2], lineSplit[3], lineSplit[4]);
     }
 
     private void parseAndAddLineToStateDB(Integer idCadruDidactic, String[] lineSplit) throws FieldValidationException,
@@ -305,5 +293,83 @@ public class RepositoryBD {
         p.setInt(9, oreS2);
         p.setInt(10, oreL2);
         p.executeUpdate();
+    }
+
+    public void stergeCadruDidactic(int id_Cadru_Didactic) throws SQLException {
+        Connection conn = getConnection();
+
+        PreparedStatement p;
+        p = conn.prepareStatement("Delete from Cadre_Didactice where id_Cadru_Didactic = ?");
+        p.setInt(1, id_Cadru_Didactic);
+        p.executeUpdate();
+    }
+
+    public void modificaCadruDidactic(Cadru_Didactic cd) throws SQLException {
+        Connection conn = getConnection();
+        PreparedStatement p;
+        p = conn.prepareStatement("UPDATE Cadre_Didactice  SET "
+                + "pozitia = ?, "
+                + "den_post = ?, "
+                + "nume = ?, "
+                + "functia= ?, "
+                + "tit_vac = ? "
+                + "WHERE Id_Cadru_Didactic= ?");
+        p.setString(1, cd.getPozitia());
+        p.setString(2, cd.getDen_post());
+        p.setString(3, cd.getNume());
+        p.setString(4, cd.getFunctia());
+        p.setString(5, cd.getTit_vac());
+        p.setInt(6, cd.getId_Cadru_Didactic());
+        p.executeUpdate();
+    }
+
+    public int adaugaCadruDidactic(Cadru_Didactic cd) throws SQLException {
+        Connection conn = getConnection();
+        PreparedStatement p;
+        p = conn.prepareStatement("INSERT INTO Cadre_Didactice  VALUES(?,?,?,?,?)");
+        p.setString(1, cd.getPozitia());
+        p.setString(2, cd.getDen_post());
+        p.setString(3, cd.getNume());
+        p.setString(4, cd.getFunctia());
+        p.setString(5, cd.getTit_vac());
+        p.executeUpdate();
+
+        p = conn.prepareStatement("Select Id_Cadru_Didactic from Cadre_Didactice where pozitia=? and den_post=? and nume=? and functia=? and tit_vac=?");
+        p.setString(1, cd.getPozitia());
+        p.setString(2, cd.getDen_post());
+        p.setString(3, cd.getNume());
+        p.setString(4, cd.getFunctia());
+        p.setString(5, cd.getTit_vac());
+        ResultSet rs = p.executeQuery();
+        rs.next();
+        return rs.getInt(1);
+    }
+
+    public List<Cadru_Didactic> getCadreDidactice() throws SQLException {
+        myConnection = getConnection();
+        ResultSet rs;
+        List<Cadru_Didactic> list = new LinkedList<Cadru_Didactic>();
+
+        PreparedStatement statement = myConnection.prepareStatement("SELECT * FROM Cadre_Didactice");
+        rs = statement.executeQuery();
+
+
+        while (rs.next()) {
+            int id = rs.getInt(1);
+            String pozitia = rs.getString(2);
+            String den_post = rs.getString(3);
+            String nume = rs.getString(4);
+            String functia = rs.getString(5);
+            String tit_vac = rs.getString(6);
+            Cadru_Didactic cadruDidactic = new Cadru_Didactic(id, pozitia, den_post, nume, functia, tit_vac);
+            list.add(cadruDidactic);
+        }
+
+        rs.close();
+        myConnection.close();
+
+        return list;
+
+
     }
 }

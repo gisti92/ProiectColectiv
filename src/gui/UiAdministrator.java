@@ -204,7 +204,9 @@ public class UiAdministrator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImportaStateActionPerformed
 
     private void btnInregResUmaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResUmaneActionPerformed
-        showNotYetSupportedDialog();
+        setVisible(false);
+        new GestioneazaResurseUmaneDialog(this,true).setVisible(true);
+        setVisible(true);
     }//GEN-LAST:event_btnInregResUmaneActionPerformed
 
     private void btnInregResFinanciareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResFinanciareActionPerformed
