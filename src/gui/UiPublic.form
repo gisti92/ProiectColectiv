@@ -33,8 +33,8 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton3" min="-2" pref="286" max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" pref="286" max="-2" attributes="0"/>
+                  <Component id="btnCalendar" min="-2" pref="286" max="-2" attributes="0"/>
+                  <Component id="btnProiecte" min="-2" pref="286" max="-2" attributes="0"/>
                   <Component id="btnInfoResurse" min="-2" pref="286" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
@@ -47,9 +47,9 @@
               <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
               <Component id="btnInfoResurse" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+              <Component id="btnProiecte" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+              <Component id="btnCalendar" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="66" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -82,15 +82,18 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInfoResurseActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnProiecte">
       <Properties>
         <Property name="text" type="java.lang.String" value="Informatii despre proiectele departamentului"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="btnCalendar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Calendarul activitatiilor"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalendarActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

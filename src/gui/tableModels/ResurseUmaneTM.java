@@ -13,10 +13,11 @@ import model.Cadru_Didactic;
  *
  * @author Deea
  */
-public class ResurseUmaneTM extends AbstractTableModel{
-    private String[] header = {"Pozitia","Denumire post","Nume","Functie","Titular/Vacant"};
+public class ResurseUmaneTM extends AbstractTableModel {
+
+    private String[] header = {"Pozitia", "Denumire post", "Nume", "Functie", "Titular/Vacant"};
     private List<Cadru_Didactic> list = new ArrayList<Cadru_Didactic>();
-    
+
     @Override
     public int getRowCount() {
         return list.size();
@@ -27,15 +28,29 @@ public class ResurseUmaneTM extends AbstractTableModel{
         return header.length;
     }
 
+    public int getIdByRow(int rowIndex) {
+        if (rowIndex < 0 || rowIndex >= list.size()) {
+            return -1;
+        } else {
+            return list.get(rowIndex).getId_Cadru_Didactic();
+        }
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (columnIndex){
-            case 0: return list.get(rowIndex).getPozitia();
-            case 1: return list.get(rowIndex).getDen_post();
-            case 2: return list.get(rowIndex).getNume();
-            case 3: return list.get(rowIndex).getFunctia();
-            case 4: return list.get(rowIndex).getTit_vac();
-            default : return null;       
+        switch (columnIndex) {
+            case 0:
+                return list.get(rowIndex).getPozitia();
+            case 1:
+                return list.get(rowIndex).getDen_post();
+            case 2:
+                return list.get(rowIndex).getNume();
+            case 3:
+                return list.get(rowIndex).getFunctia();
+            case 4:
+                return list.get(rowIndex).getTit_vac().equals("T")?"Titular":"Vacant" ;
+            default:
+                return null;
         }
     }
 
@@ -47,19 +62,19 @@ public class ResurseUmaneTM extends AbstractTableModel{
     public String getColumnName(int column) {
         return header[column];
     }
-        
-    public void clear(){
+
+    public void clear() {
         list.clear();
         fireTableDataChanged();
     }
-    
-    public void addRow(Cadru_Didactic row){
-        list.add(row);        
+
+    public void addRow(Cadru_Didactic row) {
+        list.add(row);
         fireTableDataChanged();
     }
-    
-    public void setList(List<Cadru_Didactic> list){
-        this.list=list;
+
+    public void setList(List<Cadru_Didactic> list) {
+        this.list = list;
         fireTableDataChanged();
     }
 }

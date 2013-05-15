@@ -29,7 +29,7 @@ public class InformatiResurse extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    private void bindEvents() {
+    private void bindEvents() { 
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,7 +45,8 @@ public class InformatiResurse extends javax.swing.JDialog {
                     clearTableResurse();
                     break;
                 case 1:
-                    tabelResurse.setModel(contr.getAndRefreshResurseUmaneTM());
+                     contr.refreshResurseUmaneTM();
+                     tabelResurse.setModel(contr.getResurseUmaneTM());
                     break;
                 case 2:
                     tabelResurse.setModel(contr.getAndRefreshResurseLogisticeSaliTM());
@@ -56,7 +57,7 @@ public class InformatiResurse extends javax.swing.JDialog {
                 //TODO adauga restul
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare In Informatii Resurse", JOptionPane.ERROR_MESSAGE);
         }
     }
 
