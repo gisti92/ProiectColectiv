@@ -62,7 +62,8 @@ CREATE PROCEDURE creareTabele AS
 		nume VARCHAR (30) NOT NULL,
 		functia VARCHAR (30),
 		tit_vac VARCHAR (3) NOT NULL,
-		CONSTRAINT unic_cadre_didactice UNIQUE(pozitia, den_post, nume, functia, tit_vac)
+		CONSTRAINT unic_cadre_didactice UNIQUE(pozitia, den_post, nume, functia, tit_vac),
+		CONSTRAINT check_tit_vac CHECK(tit_vac in ('T','V'))
 	)
 	
 	--************************************** Loginuri_Cadre_Didactice ******************************************
@@ -74,7 +75,7 @@ CREATE PROCEDURE creareTabele AS
 	--*********************************************  Discipline ************************************************
 	CREATE TABLE Discipline(
 		Id_Disciplina INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) UNIQUE NOT NULL
+		denumire VARCHAR (50) UNIQUE NOT NULL
 	)
 
 	--************************************************ Sectii **************************************************
@@ -137,7 +138,7 @@ CREATE PROCEDURE creareTabele AS
 
 	--****************************************** Orar **************************************************
 	CREATE TABLE Orar(
-		ziua VARCHAR(8), 
+		ziua SMALLINT, 
 		ora_inceput SMALLINT, 
 		ora_sfarsit SMALLINT, 
 		frecventa SMALLINT, 
@@ -150,9 +151,8 @@ CREATE PROCEDURE creareTabele AS
  		CONSTRAINT check_ora_inceput_orar CHECK (ora_inceput >= 8  and ora_inceput <= 18),
 		CONSTRAINT check_ora_sfarsit_orar CHECK (ora_sfarsit >= 10  and ora_sfarsit <= 20),
 		CONSTRAINT check_frecventa_orar CHECK (frecventa in (0,1,2)),
-		CONSTRAINT check_ziua_orar CHECK (ziua in ('Luni','Marti','Miercuri','Joi','Vineri','Sambata','Duminica')),
+		CONSTRAINT check_ziua_orar CHECK (ziua >= 1 and ziua <=7),
 		CONSTRAINT check_tipOra_orar CHECK (tip in ('L','S','C'))
-		
 	)
 	SET NoCount OFF
 GO
@@ -169,20 +169,12 @@ CREATE PROCEDURE adaugaFormatie
 	SET NoCount ON
 	INSERT INTO Formatii 
 		Select
-			CASE WHEN @subgrupa=0 THEN CAST(@grupa as VARCHAR(30)) ELSE CAST(@grupa as VARCHAR(30))+'/'+CAST(@subgrupa as VARCHAR(30)) END,
+			CASE WHEN @grupa=0 THEN SUBSTRING((SELECT denumire from Sectii where Id_Sectie=@Id_Sectie),1,1)+CAST(@an AS VARCHAR(10)) WHEN @subgrupa=0 THEN CAST(@grupa as VARCHAR(30)) ELSE CAST(@grupa as VARCHAR(30))+'/'+CAST(@subgrupa as VARCHAR(30)) END,
 			@Id_Sectie,
 			@an,
 			@grupa
 	SET NoCount OFF
 GO
-/*Exemplu
-INSERT INTO Sectii VALUES('Ingineria Informatiei LR')
-select * from Formatii
-EXEC adaugaFormatie 1,2,821,0
-EXEC adaugaFormatie 1,2,821,1
-EXEC adaugaFormatie 1,2,821,2
-select * from Formatii
-*/
 
 --**********************************************************************************************************
 --******************************************* modificaFormatie *********************************************
@@ -206,28 +198,57 @@ CREATE PROCEDURE modificaFormatie
 		SET NoCount OFF
 	GO
 
-/*Exemplu
-select * from Formatii
-EXEC modificaFormatie 1,1,3,831,0
-EXEC modificaFormatie 2,1,3,831,1
-EXEC modificaFormatie 3,1,3,831,2
-select * from Formatii
-*/
-
-
 EXEC stergeTabele
 EXEC creareTabele
 
+insert into Cadre_Didactice values ('21','Lect','Cioban Vasile','Lect. dr.','T')
+
+insert into Sectii values ('Informatica - LR')
+insert into Sectii values ('Ingineria informatiei - LR') 
+insert into Sectii values ('Matematica informatica - LR')
+
+insert into Sali values ('L302',30)
+insert into Sali values ('L306',30)
+insert into Sali values ('L307',30)
+insert into Sali values ('L336',30)
+insert into Sali values ('L338',30)
+insert into Sali values ('L339',30)
+insert into Sali values ('5/I',100)
+insert into Sali values ('7/I',100)
+insert into Sali values ('9/I',100)
+insert into Sali values ('A323',25)
+insert into Sali values ('L308',30)
+
+EXEC adaugaFormatie 1,3,234,1
+EXEC adaugaFormatie 1,3,232,2
+EXEC adaugaFormatie 1,3,235,2
+EXEC adaugaFormatie 1,2,225,2
+EXEC adaugaFormatie 1,2,222,1
+EXEC adaugaFormatie 1,2,225,1
+EXEC adaugaFormatie 2,2,821,1
+EXEC adaugaFormatie 2,3,831,1
+EXEC adaugaFormatie 2,3,831,2
+EXEC adaugaFormatie 2,3,831,0
+EXEC adaugaFormatie 1,3,0,0
+EXEC adaugaFormatie 3,1,314,0
+EXEC adaugaFormatie 3,1,313,0
+EXEC adaugaFormatie 1,2,226,1
+EXEC adaugaFormatie 1,3,233,1
+EXEC adaugaFormatie 1,3,235,1
+EXEC adaugaFormatie 3,1,312,0
+
+insert into Discipline values ('Medii de proiectare si programare')
+insert into Discipline values ('Proiect colectiv')
+insert into Discipline values ('Structuri de date si algoritmi')
 
 /*
---test pentru adaugare in orar
-insert into Cadre_Didactice values('Lect','lectblabla','Gereb Istvan','functie','tit');
+select * from Cadre_Didactice
+select * from sectii
+select * from sali
+select * from formatii
 
-insert into Discipline values('disciplina1');
+SELECT ziua, ora_inceput, ora_sfarsit, frecventa, s.denumire as Sala ,  c.nume as Cadru_Didactic , sec.denumire as Sectie, f.an as An,f.denumire as Formatia, tip as Tipul, d.denumire as disciplina FROM orar o inner join sali s on o.Id_Sala=s.Id_Sala inner join  Discipline d on o.Id_Disciplina= d.Id_Disciplina inner join Cadre_Didactice c on o.Id_Cadru_Didactic= c.Id_Cadru_Didactic inner join formatii f on o.Id_Formatie = f.Id_Formatie inner join Sectii sec on sec.Id_Sectie = f.Id_Sectie
 
-insert into Sali values ('sala1',78);
-
-insert into Sectii values ('Informatica');
-
-EXEC adaugaFormatie 1,2,821,1
+select * from State_De_Functii
+select * from Alte_Activitati_CD
 */
