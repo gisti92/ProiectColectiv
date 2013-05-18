@@ -24,7 +24,7 @@ public class RepositoryBD {
     private Properties props = null;
     private Connection myConnection;
 
-    private RepositoryBD() {
+    protected RepositoryBD() {
         props = getProperties();
         myConnection = getConnection();
     }
@@ -46,7 +46,7 @@ public class RepositoryBD {
         return props;
     }
 
-    private Connection getConnection() {
+    protected Connection getConnection() {
         Connection con = null;
         try {
             Class.forName(props.getProperty("jdbc.driver"));
