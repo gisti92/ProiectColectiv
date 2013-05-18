@@ -4,7 +4,9 @@
  */
 package gui.director;
 
+import gui.director.models.ProjectsTableModel;
 import model.director.Proiect;
+import persistence.DirectorRepositoryDB;
 
 /**
  *
@@ -19,6 +21,9 @@ public class ProjectManagement extends javax.swing.JFrame {
     public ProjectManagement(Proiect.ProjectType projectType) {
         initComponents();
         setTitle(projectType.toString());
+        
+        projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+        
     }
 
     /**

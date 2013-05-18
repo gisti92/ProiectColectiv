@@ -4,6 +4,10 @@
  */
 package persistence;
 
+import java.util.ArrayList;
+import java.util.List;
+import model.director.Proiect;
+
 /**
  *
  * @author Artiom.Casapu
@@ -24,6 +28,35 @@ public class DirectorRepositoryDB extends RepositoryBD {
         return instance;
     }
     
-//    public List<
+    public List<Proiect> getProjects() {
+       
+        ArrayList<Proiect> result = new ArrayList();
+        
+        Proiect p = new Proiect();
+        p.setDenumire("Denumire1");
+        p.setDescrire("Descriere1");
+        
+        result.add(p);
+        
+        p = new Proiect();
+        p.setDenumire("Denumire2");
+        p.setDescrire("Dercriere2");
+        
+        result.add(p);
+        
+        p = new Proiect();
+        
+        p.setDenumire("Descriere3");
+        p.setDescrire("Descriere3");
+        
+        result.add(p);
+       
+        return result;
+        
+    }
+    
+    public void addProject() {
+        
+    }
     
 }
