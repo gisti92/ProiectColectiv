@@ -136,7 +136,10 @@ public class UiDirector extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void evenimentAdministrativButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evenimentAdministrativButtonActionPerformed
-        // TODO add your handling code here:
+        
+        ProjectManagement prj = new ProjectManagement(ProjectType.EVENIMENT_ADMINISTRATIV);
+        prj.setVisible(true);
+        
     }//GEN-LAST:event_evenimentAdministrativButtonActionPerformed
 
     private void granturiCercetareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_granturiCercetareButtonActionPerformed

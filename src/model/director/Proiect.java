@@ -16,7 +16,7 @@ public class Proiect {
     public enum ProjectType {
         EVENIMENT_ADMINISTRATIV,
         PROIECT_STIINTIFIC;
-
+       
         @Override
         public String toString() {
             if (this.equals(ProjectType.EVENIMENT_ADMINISTRATIV))
@@ -26,6 +26,14 @@ public class Proiect {
             }
             return null;
         }
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDenumire() {
@@ -65,6 +73,7 @@ public class Proiect {
         this.interval = interval;
     }
     
+    private int id;
     private String denumire;
     private String descrire;
     private ProjectType tip;

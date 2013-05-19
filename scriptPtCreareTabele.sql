@@ -154,6 +154,59 @@ CREATE PROCEDURE creareTabele AS
 		CONSTRAINT check_tipOra_orar CHECK (tip in ('L','S','C'))
 		
 	)
+	
+	--***************************************** Projects ***********************************************
+	CREATE TABLE Projects (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		tip INT,
+		denumire VARCHAR(1024),
+		descriere VARCHAR(10000),
+		timp_inceput DATE,
+		timp_sfirsit DATE
+	)
+	
+	CREATE TABLE Phases (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		project_id INT,
+		tip INT,
+		denumire VARCHAR(1024),
+		descriere VARCHAR(10000),
+		timp_inceput DATE,
+		timp_sfirsit DATE	
+	)
+	
+	CREATE TABLE Tasks (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		phase_id INT,
+		tip INT,
+		denumire VARCHAR(1024),
+		descriere VARCHAR(10000),
+		timp_inceput DATE,
+		timp_sfirsit DATE
+	)
+	
+	CREATE TABLE TaskLogisticEquipment (
+		task_id INT,
+		equipment_id INT
+	)
+	
+	CREATE TABLE TaskLogisticRoom (
+		task_id INT,
+		room_id INT
+	)
+	
+	CREATE TABLE TaskBudget (
+		task_id INT,
+		budget_type INT,
+		suma INT,
+		descriere VARCHAR(10000)
+	)
+	
+	CREATE TABLE TaskTeam (
+		task_id INT,
+		cadru_didactic_id INT
+	)
+	
 	SET NoCount OFF
 GO
 --**********************************************************************************************************

@@ -5,7 +5,11 @@
 package gui.director;
 
 import gui.director.models.ProjectsTableModel;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.director.Proiect;
+import model.director.Proiect.ProjectType;
 import persistence.DirectorRepositoryDB;
 
 /**
@@ -21,8 +25,11 @@ public class ProjectManagement extends javax.swing.JFrame {
     public ProjectManagement(Proiect.ProjectType projectType) {
         initComponents();
         setTitle(projectType.toString());
-        
-        projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+        try {
+            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
@@ -73,6 +80,11 @@ public class ProjectManagement extends javax.swing.JFrame {
         jScrollPane2.setViewportView(projectsTable);
 
         insertButton.setText("Adauga");
+        insertButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertButtonActionPerformed(evt);
+            }
+        });
 
         updateButton.setText("Modifica");
 
@@ -122,6 +134,30 @@ public class ProjectManagement extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
+        
+        Proiect p = new Proiect();
+        p.setTip(ProjectType.EVENIMENT_ADMINISTRATIV);
+        
+        ProjectForm frm = new ProjectForm(p, false);
+        frm.setModal(true);
+        frm.setVisible(true);
+        
+        if (frm.isOk()) {
+            try {
+                DirectorRepositoryDB.getInstance().addProject(p);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+            } catch (SQLException ex) {
+                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }//GEN-LAST:event_insertButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;

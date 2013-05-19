@@ -66,6 +66,15 @@ public class Faza {
         this.tip = tip;
     }
     
+    public int getId() {
+        return id;
+    }
+    
+    public void setId() {
+        this.id = id;
+    }
+    
+    private int id;
     private String denumire;
     private String descriere;
     private TimeInterval interval;

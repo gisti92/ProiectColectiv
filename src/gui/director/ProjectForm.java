@@ -4,17 +4,56 @@
  */
 package gui.director;
 
+import gui.director.models.PhasesTableModel;
+import java.util.Date;
+import model.director.Proiect;
+import model.director.Proiect.ProjectType;
+import model.director.TimeInterval;
+
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
-public class ProjectForm extends javax.swing.JFrame {
+public class ProjectForm extends javax.swing.JDialog {
 
+    private Proiect prj;
+    private boolean ok = false;
     /**
      * Creates new form ProjectForm
      */
-    public ProjectForm() {
+    public ProjectForm(Proiect prj, boolean update) {
         initComponents();
+        
+        this.prj = prj;
+        
+        if (prj.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV)) {
+            jLabel5.setText("Activitati");
+        }
+        
+        if (prj.getTip().equals(ProjectType.PROIECT_STIINTIFIC)) {
+            jLabel5.setText("Faze");
+        }
+        
+        if (update) {
+            
+            denumireTextField.setText(prj.getDenumire());
+            descriptionEdit.setText(prj.getDescrire());
+            startTimeFormattedTextField.setValue(prj.getInterval().getStart());
+            endTimeFormattedTextField.setValue(prj.getInterval().getEnd());
+            
+            phasesTable.setModel(new PhasesTableModel(prj.getFaze()));
+            
+        }
+        
+    }
+    
+    private void updateProject() {
+        prj.setDenumire(denumireTextField.getText());
+        prj.setDescrire(descriptionEdit.getText());
+        TimeInterval interval = new TimeInterval();
+        interval.setStart((Date)startTimeFormattedTextField.getValue());
+        interval.setEnd((Date)endTimeFormattedTextField.getValue());
+        prj.setInterval(interval);
     }
 
     /**
@@ -41,10 +80,10 @@ public class ProjectForm extends javax.swing.JFrame {
         adaugaButton = new javax.swing.JButton();
         modificaButton = new javax.swing.JButton();
         stergeButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Denumire:");
 
@@ -54,9 +93,9 @@ public class ProjectForm extends javax.swing.JFrame {
 
         jLabel4.setText("Timp sfirsit:");
 
-        startTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        startTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
 
-        endTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        endTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
 
         jScrollPane1.setViewportView(descriptionEdit);
 
@@ -81,9 +120,19 @@ public class ProjectForm extends javax.swing.JFrame {
 
         stergeButton.setText("Sterge");
 
-        jButton4.setText("OK");
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Cancel");
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,9 +142,9 @@ public class ProjectForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4)
+                        .addComponent(okButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5))
+                        .addComponent(cancelButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -110,7 +159,7 @@ public class ProjectForm extends javax.swing.JFrame {
                             .addComponent(denumireTextField)
                             .addComponent(startTimeFormattedTextField)
                             .addComponent(endTimeFormattedTextField)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(adaugaButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -150,21 +199,39 @@ public class ProjectForm extends javax.swing.JFrame {
                     .addComponent(stergeButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
+        ok = true;
+        updateProject();
+        
+        setVisible(false);
+        
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        
+        setVisible(false);
+        
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    public boolean isOk() {
+        return ok;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaButton;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JTextField denumireTextField;
     private javax.swing.JEditorPane descriptionEdit;
     private javax.swing.JFormattedTextField endTimeFormattedTextField;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -173,6 +240,7 @@ public class ProjectForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton modificaButton;
+    private javax.swing.JButton okButton;
     private javax.swing.JTable phasesTable;
     private javax.swing.JFormattedTextField startTimeFormattedTextField;
     private javax.swing.JButton stergeButton;
