@@ -207,7 +207,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
     
     public List<ResursaFinanciara> getBuget(int taskId) throws SQLException {
         
-        String query = "SELECT * FROM TaskBudget WHERE taskId =  " + taskId;
+        String query = "SELECT * FROM TaskBudget WHERE task_id =  " + taskId;
         
         PreparedStatement stmt = getConnection().prepareStatement(query);
         ResultSet res = stmt.executeQuery();

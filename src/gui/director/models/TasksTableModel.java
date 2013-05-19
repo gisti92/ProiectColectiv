@@ -7,27 +7,24 @@ package gui.director.models;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import model.director.Faza;
+import model.director.Task;
 
 /**
  *
  * @author Artiom.Casapu
  */
-public class PhasesTableModel extends AbstractTableModel {
+public class TasksTableModel extends AbstractTableModel {
 
     private String[] columns = {"Denumire", "Descriere", "Timp inceput", "Timp sfirsit"};
-    private List<Faza> faze;
+    private List<Task> tasks;
     
-    public PhasesTableModel(List<Faza> faze) {
-        this.faze = faze;
-    }
-    
-    public Faza getFaza(int index) {
-        return faze.get(index);
+    public TasksTableModel(List<Task> tasks) {
+        this.tasks = tasks;
     }
     
     @Override
     public int getRowCount() {
-        return faze.size();
+        return tasks.size();
     }
 
     @Override
@@ -44,13 +41,13 @@ public class PhasesTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return faze.get(rowIndex).getDenumire();
+                return tasks.get(rowIndex).getDenumire();
             case 1:
-                return faze.get(rowIndex).getDescriere();
+                return tasks.get(rowIndex).getDescriere();
             case 2:
-                return faze.get(rowIndex).getInterval().getStart();
+                return tasks.get(rowIndex).getInterval().getStart();
             case 3:
-                return faze.get(rowIndex).getInterval().getEnd();
+                return tasks.get(rowIndex).getInterval().getEnd();
         }
         return null;
     }

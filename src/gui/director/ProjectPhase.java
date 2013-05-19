@@ -4,17 +4,22 @@
  */
 package gui.director;
 
+import gui.director.models.TasksTableModel;
+import model.director.Faza;
+
 /**
  *
  * @author User
  */
-public class ProjectPhase extends javax.swing.JFrame {
+public class ProjectPhase extends javax.swing.JDialog {
 
     /**
      * Creates new form ProjectPhases
      */
-    public ProjectPhase() {
+    public ProjectPhase(Faza f) {
         initComponents();
+        
+        tasksTable.setModel(new TasksTableModel(f.getTaskuri()));
     }
 
     /**
@@ -43,7 +48,7 @@ public class ProjectPhase extends javax.swing.JFrame {
         startTimeFormattedTextField = new javax.swing.JFormattedTextField();
         endTimeFormattedTextField = new javax.swing.JFormattedTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Denumire:");
 
@@ -164,7 +169,7 @@ public class ProjectPhase extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

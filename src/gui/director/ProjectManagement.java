@@ -87,6 +87,11 @@ public class ProjectManagement extends javax.swing.JFrame {
         });
 
         updateButton.setText("Modifica");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setText("Sterge");
 
@@ -158,6 +163,17 @@ public class ProjectManagement extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_insertButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+      
+        int row = projectsTable.getSelectedRow();
+        Proiect p = ((ProjectsTableModel) projectsTable.getModel()).getProject(row);
+        
+        ProjectForm frm = new ProjectForm(p, true); 
+        frm.setModal(true);
+        frm.setVisible(true);
+        
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;

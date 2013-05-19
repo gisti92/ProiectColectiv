@@ -6,6 +6,7 @@ package gui.director;
 
 import gui.director.models.PhasesTableModel;
 import java.util.Date;
+import model.director.Faza;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
 import model.director.TimeInterval;
@@ -117,6 +118,11 @@ public class ProjectForm extends javax.swing.JDialog {
         adaugaButton.setText("Adauga");
 
         modificaButton.setText("Modifica");
+        modificaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificaButtonActionPerformed(evt);
+            }
+        });
 
         stergeButton.setText("Sterge");
 
@@ -221,6 +227,17 @@ public class ProjectForm extends javax.swing.JDialog {
         setVisible(false);
         
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
+        
+        int row = phasesTable.getSelectedRow();
+        Faza f = ((PhasesTableModel) phasesTable.getModel()).getFaza(row);
+        
+        ProjectPhase phase = new ProjectPhase(f);
+        phase.setModal(true);
+        phase.setVisible(true);
+        
+    }//GEN-LAST:event_modificaButtonActionPerformed
 
     public boolean isOk() {
         return ok;

@@ -21,6 +21,10 @@ public class ProjectsTableModel extends AbstractTableModel {
         this.proiect = proiect;
     }
     
+    public Proiect getProject(int index) {
+        return proiect.get(index);
+    }
+    
     @Override
     public int getRowCount() {
         return proiect.size();
