@@ -10,6 +10,14 @@ package model.director;
  */
 public class ResursaFinanciara {
 
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public int getSuma() {
         return suma;
     }
@@ -34,6 +42,7 @@ public class ResursaFinanciara {
         this.tip = tip;
     }
     
+    private int id;
     private int suma;
     private String descriere;
     private TipCheltuiala tip;

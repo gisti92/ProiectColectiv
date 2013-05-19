@@ -156,6 +156,8 @@ CREATE PROCEDURE creareTabele AS
 	)
 	
 	--***************************************** Projects ***********************************************
+	-- tip 1 - eveniment administrativ
+	-- tip 2 - proiect stiintific
 	CREATE TABLE Projects (
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		tip INT,
@@ -165,6 +167,8 @@ CREATE PROCEDURE creareTabele AS
 		timp_sfirsit DATE
 	)
 	
+	-- tip 1 - activitate administrativa
+	-- tip 2 - faza
 	CREATE TABLE Phases (
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		project_id INT,
@@ -175,6 +179,8 @@ CREATE PROCEDURE creareTabele AS
 		timp_sfirsit DATE	
 	)
 	
+	-- tip 1 - sarcina
+	-- tip 2 - activitate
 	CREATE TABLE Tasks (
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		phase_id INT,
@@ -195,11 +201,16 @@ CREATE PROCEDURE creareTabele AS
 		room_id INT
 	)
 	
+	-- budget_type 1 - CheltuieliCuMobilitate
+	-- budget_type 2 - CheltuieliCuManopera
+	-- budget_type 3 - CheltuieliDeLogistica
+	
 	CREATE TABLE TaskBudget (
+		id INT IDENTITY(1,1) PRIMARY KEY,
 		task_id INT,
 		budget_type INT,
 		suma INT,
-		descriere VARCHAR(10000)
+		descriere VARCHAR(5000)
 	)
 	
 	CREATE TABLE TaskTeam (

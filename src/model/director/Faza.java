@@ -70,7 +70,7 @@ public class Faza {
         return id;
     }
     
-    public void setId() {
+    public void setId(int id) {
         this.id = id;
     }
     
@@ -80,7 +80,7 @@ public class Faza {
     private TimeInterval interval;
     private List<Task> taskuri;
     private PhaseType tip;
-
+    
     public List<Task> getTaskuri() {
         return taskuri;
     }

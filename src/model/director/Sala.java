@@ -17,21 +17,12 @@ public class Sala extends ResursaLogistica {
     public void setCapacitate(int capacitate) {
         this.capacitate = capacitate;
     }
-
-    public String getDescriere() {
-        return descriere;
-    }
-
-    public void setDescriere(String descriere) {
-        this.descriere = descriere;
-    }
     
     @Override
     public String toString() {
-        return descriere + " (capacitate - " + getCapacitate() + ")"; 
+        return getDenumire() + " (capacitate - " + getCapacitate() + ")"; 
     }
     
     private int capacitate;
-    private String descriere;
     
 }

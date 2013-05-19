@@ -37,7 +37,7 @@ public class ProjectForm extends javax.swing.JDialog {
         if (update) {
             
             denumireTextField.setText(prj.getDenumire());
-            descriptionEdit.setText(prj.getDescrire());
+            descriptionEdit.setText(prj.getDescriere());
             startTimeFormattedTextField.setValue(prj.getInterval().getStart());
             endTimeFormattedTextField.setValue(prj.getInterval().getEnd());
             
@@ -49,7 +49,7 @@ public class ProjectForm extends javax.swing.JDialog {
     
     private void updateProject() {
         prj.setDenumire(denumireTextField.getText());
-        prj.setDescrire(descriptionEdit.getText());
+        prj.setDescriere(descriptionEdit.getText());
         TimeInterval interval = new TimeInterval();
         interval.setStart((Date)startTimeFormattedTextField.getValue());
         interval.setEnd((Date)endTimeFormattedTextField.getValue());

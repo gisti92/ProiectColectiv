@@ -44,12 +44,12 @@ public class Proiect {
         this.denumire = denumire;
     }
 
-    public String getDescrire() {
-        return descrire;
+    public String getDescriere() {
+        return descriere;
     }
 
-    public void setDescrire(String descrire) {
-        this.descrire = descrire;
+    public void setDescriere(String descriere) {
+        this.descriere = descriere;
     }
 
     public ProjectType getTip() {
@@ -75,7 +75,7 @@ public class Proiect {
     
     private int id;
     private String denumire;
-    private String descrire;
+    private String descriere;
     private ProjectType tip;
     private TimeInterval interval;
     

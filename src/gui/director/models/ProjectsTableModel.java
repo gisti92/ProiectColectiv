@@ -42,7 +42,7 @@ public class ProjectsTableModel extends AbstractTableModel {
             case 0:
                 return proiect.get(rowIndex).getDenumire();
             case 1:
-                return proiect.get(rowIndex).getDescrire();
+                return proiect.get(rowIndex).getDescriere();
         }
         return null;
     }
