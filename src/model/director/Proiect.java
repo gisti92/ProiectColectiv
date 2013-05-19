@@ -56,9 +56,19 @@ public class Proiect {
         return faze;
     }
     
+    
+    public TimeInterval getInterval() {
+        return interval;
+    }
+
+    public void setInterval(TimeInterval interval) {
+        this.interval = interval;
+    }
+    
     private String denumire;
     private String descrire;
     private ProjectType tip;
+    private TimeInterval interval;
     
     private List<Faza> faze;
     

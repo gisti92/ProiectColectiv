@@ -13,6 +13,26 @@ import java.util.List;
  */
 public class Task {
     
+    public enum TaskType {
+        SCIENTIFIC_ACTIVITY,
+        ADMINISTRATIVE_TASK;
+
+        @Override
+        public String toString() {
+            
+            if (this.equals(TaskType.SCIENTIFIC_ACTIVITY)) {
+                return "Activitate";
+            }
+            
+            if (this.equals(TaskType.ADMINISTRATIVE_TASK)) {
+                return "Sarcina";
+            }
+            
+            return super.toString();
+        }
+        
+    }
+    
     private int id;
     private List<CadruDidactic> echipa;
     private List<ResursaLogistica> resurseLogistice;
@@ -20,6 +40,7 @@ public class Task {
     private String denumire;
     private String descriere;
     private TimeInterval interval;
+    private TaskType tip;
 
     public TimeInterval getInterval() {
         return interval;
@@ -97,6 +118,20 @@ public class Task {
      */
     public void setDescriere(String descriere) {
         this.descriere = descriere;
+    }
+    
+    /**
+     * @return the tip
+     */
+    public TaskType getTip() {
+        return tip;
+    }
+
+    /**
+     * @param tip the tip to set
+     */
+    public void setTip(TaskType tip) {
+        this.tip = tip;
     }
     
 }

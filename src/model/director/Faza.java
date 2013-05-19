@@ -12,6 +12,23 @@ import java.util.List;
  * @author Artiom.Casapu
  */
 public class Faza {
+    
+    public enum PhaseType {
+        ADMINISTRATIVE_ACTIVITY,
+        PHASE;
+
+        @Override
+        public String toString() {
+            if (this.equals(PhaseType.ADMINISTRATIVE_ACTIVITY)) {
+                return "Activitate administrativa";
+            }
+            if (this.equals(PhaseType.PHASE)) {
+                return "Faza";
+            }
+            return super.toString();
+        }
+        
+    }
 
     public Faza() {
         taskuri = new ArrayList<Task>();
@@ -41,12 +58,19 @@ public class Faza {
         this.interval = interval;
     }
     
+    public PhaseType getTip() {
+        return tip;
+    }
+
+    public void setTip(PhaseType tip) {
+        this.tip = tip;
+    }
+    
     private String denumire;
     private String descriere;
-    
     private TimeInterval interval;
-    
     private List<Task> taskuri;
+    private PhaseType tip;
 
     public List<Task> getTaskuri() {
         return taskuri;

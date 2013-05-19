@@ -26,6 +26,11 @@ public class Sala extends ResursaLogistica {
         this.descriere = descriere;
     }
     
+    @Override
+    public String toString() {
+        return descriere + " (capacitate - " + getCapacitate() + ")"; 
+    }
+    
     private int capacitate;
     private String descriere;
     
