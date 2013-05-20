@@ -4,10 +4,12 @@
  */
 package persistence;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -82,25 +84,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
         return result;
         
     }
-    
-    public void addProject(Proiect p) throws SQLException {
-        
-        String query = "INSERT INTO Projects VALUES (?,?,?,?,?)";    
-        
-        PreparedStatement stmt = getConnection().prepareStatement(query);
-        stmt.setInt(1, p.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV) ? 1 : 2);
-        stmt.setString(2, p.getDenumire());
-        stmt.setString(3, p.getDescriere());
-        
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(p.getInterval().getStart());
-        stmt.setDate(4, new java.sql.Date(cal.getTimeInMillis()));
-        cal.setTime(p.getInterval().getEnd());
-        stmt.setDate(5, new java.sql.Date(cal.getTimeInMillis()));
-        
-        stmt.executeUpdate();
-        
-    }
+
     
     public List<Faza> getPhases(int projectId) throws SQLException {
         
@@ -288,6 +272,106 @@ public class DirectorRepositoryDB extends RepositoryBD {
         
         
         return result;
+    }
+    
+    public void deleteProject(Proiect prj) throws SQLException {
+        
+        Connection con = getConnection();
+        con.setAutoCommit(false);
+        
+        for (Faza f : prj.getFaze()) {
+            deletePhase(f, con);
+        }
+        
+        try {
+        
+            String query = "DELETE * FROM Projects WHERE id =  " + prj.getId();
+
+            Statement stmt = con.prepareStatement(query);
+            stmt.executeUpdate(query);
+
+            con.commit();
+        } 
+        catch (SQLException e) {
+            con.rollback();
+            throw e;
+        }
+    }
+    
+    public void deletePhase(Faza fz, Connection connection) throws SQLException {
+        
+        for (Task t : fz.getTaskuri()) {
+            deleteTask(t, connection);
+        }
+        
+        String query = "DELETE * FROM Phases WHERE id = " + fz.getId();
+        Statement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+        
+    }
+    
+    public void deleteTask(Task t, Connection connection) throws SQLException {
+        
+        deleteTaskLogisticEquipment(t, connection);
+        deleteTaskBudget(t, connection);
+        deleteTaskTeam(t, connection);
+        
+        
+        String query = "DELETE * FROM Tasks WHERE id = " + t.getId();
+        Statement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+        
+    }
+    
+    public void deleteTaskLogisticEquipment(Task t, Connection connection) throws SQLException {
+        
+        String query = "DELETE * FROM TaskLogisticEquipment WHERE id = " + t.getId();
+        Statement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+        
+        query = "DELETE * FROM TaskLogisticRoom WHERE id = " + t.getId();
+        stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+        
+    }
+    
+    public void deleteTaskBudget(Task t, Connection connection) throws SQLException {
+        
+        String query = "DELETE * FROM TaskBudget WHERE id = " + t.getId();
+        Statement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+    
+    }
+    
+    public void deleteTaskTeam(Task t, Connection connection) throws SQLException {
+        
+        String query = "DELETE * FROM TaskTeam WHERE id = " + t.getId();
+        Statement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate(query);
+        
+    }
+    
+        
+    public void addProject(Proiect p) throws SQLException {
+        
+        String query = "INSERT INTO Projects VALUES (?,?,?,?,?)";    
+        
+        Connection con = getConnection();
+        con.setAutoCommit(false);
+        
+        PreparedStatement stmt = getConnection().prepareStatement(query);
+        stmt.setInt(1, p.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV) ? 1 : 2);
+        stmt.setString(2, p.getDenumire());
+        stmt.setString(3, p.getDescriere());
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(p.getInterval().getStart());
+        stmt.setDate(4, new java.sql.Date(cal.getTimeInMillis()));
+        cal.setTime(p.getInterval().getEnd());
+        stmt.setDate(5, new java.sql.Date(cal.getTimeInMillis()));
+        
+        stmt.executeUpdate();
+        
     }
     
     
