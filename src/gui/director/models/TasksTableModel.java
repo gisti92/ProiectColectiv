@@ -22,6 +22,10 @@ public class TasksTableModel extends AbstractTableModel {
         this.tasks = tasks;
     }
     
+    public Task getTask(int index) {
+        return tasks.get(index);
+    }
+    
     @Override
     public int getRowCount() {
         return tasks.size();

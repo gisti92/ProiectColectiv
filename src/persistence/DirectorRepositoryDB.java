@@ -16,6 +16,7 @@ import java.util.List;
 import model.director.CadruDidactic;
 import model.director.Echipament;
 import model.director.Faza;
+import model.director.Faza.PhaseType;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
 import model.director.ResursaFinanciara;
@@ -189,6 +190,31 @@ public class DirectorRepositoryDB extends RepositoryBD {
         return result;
     }
     
+    public List<CadruDidactic> getCadriDidactici() throws SQLException {
+        
+        String query = "SELECT * FROM Cadre_Didactice";
+        
+        PreparedStatement stmt = getConnection().prepareStatement(query);
+        ResultSet res = stmt.executeQuery();
+        
+        List<CadruDidactic> result = new ArrayList<CadruDidactic>();
+        
+        while (res.next()) {
+            
+            CadruDidactic cd = new CadruDidactic();
+            cd.setId(res.getInt("Id_Cadru_Didactic"));
+            cd.setDenumirePost(res.getString("den_post"));
+            cd.setNume(res.getString("nume"));
+            cd.setPositia(res.getString("pozitia"));
+            cd.setTitVac(res.getString("tit_vac"));
+            cd.setFunctia(res.getString("functia"));
+    
+            result.add(cd);
+        }
+        
+        return result;
+    }
+    
     public List<ResursaFinanciara> getBuget(int taskId) throws SQLException {
         
         String query = "SELECT * FROM TaskBudget WHERE task_id =  " + taskId;
@@ -285,10 +311,10 @@ public class DirectorRepositoryDB extends RepositoryBD {
         
         try {
         
-            String query = "DELETE * FROM Projects WHERE id =  " + prj.getId();
+            String query = "DELETE FROM Projects WHERE id =  " + prj.getId();
 
-            Statement stmt = con.prepareStatement(query);
-            stmt.executeUpdate(query);
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
 
             con.commit();
         } 
@@ -304,9 +330,9 @@ public class DirectorRepositoryDB extends RepositoryBD {
             deleteTask(t, connection);
         }
         
-        String query = "DELETE * FROM Phases WHERE id = " + fz.getId();
-        Statement stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        String query = "DELETE FROM Phases WHERE id = " + fz.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate();
         
     }
     
@@ -317,37 +343,37 @@ public class DirectorRepositoryDB extends RepositoryBD {
         deleteTaskTeam(t, connection);
         
         
-        String query = "DELETE * FROM Tasks WHERE id = " + t.getId();
-        Statement stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        String query = "DELETE FROM Tasks WHERE id = " + t.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate();
         
     }
     
     public void deleteTaskLogisticEquipment(Task t, Connection connection) throws SQLException {
         
-        String query = "DELETE * FROM TaskLogisticEquipment WHERE id = " + t.getId();
-        Statement stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        String query = "DELETE FROM TaskLogisticEquipment WHERE task_id = " + t.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate();
         
-        query = "DELETE * FROM TaskLogisticRoom WHERE id = " + t.getId();
+        query = "DELETE FROM TaskLogisticRoom WHERE task_id = " + t.getId();
         stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        stmt.executeUpdate();
         
     }
     
     public void deleteTaskBudget(Task t, Connection connection) throws SQLException {
         
-        String query = "DELETE * FROM TaskBudget WHERE id = " + t.getId();
-        Statement stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        String query = "DELETE FROM TaskBudget WHERE task_id = " + t.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate();
     
     }
     
     public void deleteTaskTeam(Task t, Connection connection) throws SQLException {
         
-        String query = "DELETE * FROM TaskTeam WHERE id = " + t.getId();
-        Statement stmt = connection.prepareStatement(query);
-        stmt.executeUpdate(query);
+        String query = "DELETE FROM TaskTeam WHERE task_id = " + t.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.executeUpdate();
         
     }
     
@@ -359,7 +385,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
         Connection con = getConnection();
         con.setAutoCommit(false);
         
-        PreparedStatement stmt = getConnection().prepareStatement(query);
+        PreparedStatement stmt = getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         stmt.setInt(1, p.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV) ? 1 : 2);
         stmt.setString(2, p.getDenumire());
         stmt.setString(3, p.getDescriere());
@@ -372,7 +398,147 @@ public class DirectorRepositoryDB extends RepositoryBD {
         
         stmt.executeUpdate();
         
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            
+            int key = rs.getInt(1);
+            
+            p.setId(key);
+            
+            for (Faza f : p.getFaze()) {
+                addPhase(p, f, con);
+            }
+            
+        }
+        
+        con.commit();
+        
     }
     
+    public void addPhase(Proiect p, Faza f, Connection con) throws SQLException {
+        
+        String query = "INSERT INTO Phases VALUES (?,?,?,?,?,?)";
+        
+        PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        
+        stmt.setInt(1, p.getId());
+        stmt.setInt(2, f.getTip().equals(PhaseType.ADMINISTRATIVE_ACTIVITY) ? 1 : 2);
+        stmt.setString(3, f.getDenumire());
+        stmt.setString(4, f.getDescriere());
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(f.getInterval().getStart());
+        stmt.setDate(5, new java.sql.Date(cal.getTimeInMillis()));
+        cal.setTime(f.getInterval().getEnd());
+        stmt.setDate(6, new java.sql.Date(cal.getTimeInMillis()));
+
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            
+            int key = rs.getInt(1);
+            
+            f.setId(key);
+            
+            for (Task t : f.getTaskuri()) {
+                addTask(t, f, con);
+            }
+            
+        }
+                
+    }
+    
+    public void addTask(Task t, Faza f, Connection con) throws SQLException {
+        
+        String query = "INSERT INTO Tasks VALUES (?,?,?,?,?,?)";
+        
+        PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        
+        stmt.setInt(1, f.getId());
+        stmt.setInt(2, t.getTip().equals(PhaseType.ADMINISTRATIVE_ACTIVITY) ? 1 : 2);
+        stmt.setString(3, t.getDenumire());
+        stmt.setString(4, t.getDescriere());
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(t.getInterval().getStart());
+        stmt.setDate(5, new java.sql.Date(cal.getTimeInMillis()));
+        cal.setTime(t.getInterval().getEnd());
+        stmt.setDate(6, new java.sql.Date(cal.getTimeInMillis()));
+
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            
+            int key = rs.getInt(1);
+            t.setId(key);
+  
+            for (ResursaLogistica res : t.getResurseLogistice()) {
+                addLogisticResource(res, t, con);
+            }
+            
+            for (ResursaFinanciara res : t.getResurseFinanciare()) {
+                addBudget(res, t, con);
+            }
+            
+            for (CadruDidactic cd : t.getEchipa()) {
+                addTeam(cd, t, con);
+            }
+        }
+        
+    }
+    
+    public void addLogisticResource(ResursaLogistica res, Task t, Connection con) throws SQLException {
+        
+        String query = "INSERT INTO " + ((res instanceof Sala) ? " TaskLogisticRoom " : "TaskLogisticEquipment") + " VALUES (?,?)";
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        stmt.setInt(1, t.getId());
+        stmt.setInt(2, res.getId());
+        
+        stmt.executeUpdate();
+        
+    }
+    
+    public void addBudget(ResursaFinanciara res, Task t, Connection con) throws SQLException {
+        
+        String query = "INSERT INTO TaskBudget VALUES (?,?,?,?)";
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        stmt.setInt(1, t.getId());
+        
+        int tip = 1;
+        if (res.getTip().equals(ResursaFinanciara.TipCheltuiala.CHELTUIALA_CU_MANOPERA)) {
+            tip = 2;
+        }
+        if (res.getTip().equals(ResursaFinanciara.TipCheltuiala.CHELTUIALA_DE_LOGISTICA)) {
+            tip = 3;
+        }
+        stmt.setInt(2, tip);
+        stmt.setInt(3, res.getSuma());
+        stmt.setString(4, res.getDescriere());
+        
+        stmt.executeUpdate();
+        
+    }
+    
+    public void addTeam(CadruDidactic cd, Task t, Connection con) throws SQLException {
+        
+        String query = "INSERT INTO TaskTeam VALUES (?,?)";
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        stmt.setInt(1, t.getId());
+        stmt.setInt(2, cd.getId());
+        
+        stmt.executeUpdate();
+        
+    }
+    
+    public void updateProject(Proiect p) throws SQLException {
+        deleteProject(p);
+        addProject(p);
+    }
     
 }

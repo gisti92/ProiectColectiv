@@ -4,17 +4,80 @@
  */
 package gui.director;
 
+import gui.director.models.CadriDidacticiListModel;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import model.director.CadruDidactic;
+import model.director.ResursaFinanciara;
+import model.director.ResursaLogistica;
+import model.director.Task;
+import model.director.TimeInterval;
+import persistence.DirectorRepositoryDB;
+
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
-public class ProjectTask extends javax.swing.JFrame {
+public class ProjectTask extends javax.swing.JDialog {
 
+    private Task task;
+    private boolean ok = false;
+    
+    private List<ResursaLogistica> logistic = new ArrayList<ResursaLogistica>();
+    private List<ResursaFinanciara> financials = new ArrayList<ResursaFinanciara>();
+    
+    private List<CadruDidactic> echipa = new ArrayList<CadruDidactic>();
+    private List<CadruDidactic> cadriDidactici = new ArrayList<CadruDidactic>();
+    
     /**
      * Creates new form ProjectTask
      */
-    public ProjectTask() {
+    public ProjectTask(Task t, boolean update) throws SQLException {
+        
         initComponents();
+        
+        task = t;
+        
+        cadriDidactici = DirectorRepositoryDB.getInstance().getCadriDidactici();
+        
+        logistic.addAll(t.getResurseLogistice());
+        financials.addAll(t.getResurseFinanciare());
+        
+        if (update) {
+            updateComponents();
+            echipa = t.getEchipa();
+            cadriDidactici.removeAll(echipa);
+        }
+        
+        echipaList.setModel(new CadriDidacticiListModel(echipa));
+        cadriDidacticiList.setModel(new CadriDidacticiListModel(cadriDidactici));
+    }
+    
+    private void updateComponents() {
+        denumireTextField.setText(task.getDenumire());
+        descriereTextField.setText(task.getDescriere());
+        startTimeFormattedTextField.setValue(task.getInterval().getStart());
+        endTimeFormattedTextField.setValue(task.getInterval().getEnd()); 
+    }
+    
+    private void updateTask() {
+        
+        task.setDenumire(denumireTextField.getText());
+        task.setDescriere(descriereTextField.getText());
+        TimeInterval interval = new TimeInterval();
+        interval.setStart((Date)startTimeFormattedTextField.getValue());
+        interval.setEnd((Date)endTimeFormattedTextField.getValue());
+        task.setInterval(interval);
+        
+        task.getEchipa().clear();
+        task.getEchipa().addAll(echipa);
+        
+    }
+    
+    public boolean isOk() {
+        return ok;
     }
 
     /**
@@ -35,9 +98,9 @@ public class ProjectTask extends javax.swing.JFrame {
         startTimeFormattedTextField = new javax.swing.JFormattedTextField();
         endTimeFormattedTextField = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        echipaList = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        cadriDidacticiList = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
         logisticResourcesButton = new javax.swing.JButton();
         financialResourcesButton = new javax.swing.JButton();
@@ -47,7 +110,7 @@ public class ProjectTask extends javax.swing.JFrame {
         removeFromListButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Denumire:");
 
@@ -57,19 +120,23 @@ public class ProjectTask extends javax.swing.JFrame {
 
         jLabel4.setText("Timp sfirist:");
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        startTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        endTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
+
+        echipaList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane1.setViewportView(echipaList);
+
+        cadriDidacticiList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(cadriDidacticiList);
 
         jLabel5.setText("Echipa:");
 
@@ -78,12 +145,32 @@ public class ProjectTask extends javax.swing.JFrame {
         financialResourcesButton.setText("Resurse financiare");
 
         okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         addToListButton.setText("->");
+        addToListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToListButtonActionPerformed(evt);
+            }
+        });
 
         removeFromListButton.setText("<-");
+        removeFromListButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeFromListButtonActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Cadre didactice:");
 
@@ -171,11 +258,55 @@ public class ProjectTask extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addToListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToListButtonActionPerformed
+        
+        int index = cadriDidacticiList.getSelectedIndex();
+        
+        CadruDidactic cd = cadriDidactici.get(index);
+        
+        cadriDidactici.remove(cd);
+        echipa.add(cd);
+        
+        echipaList.setModel(new CadriDidacticiListModel(echipa));
+        cadriDidacticiList.setModel(new CadriDidacticiListModel(cadriDidactici));
+        
+    }//GEN-LAST:event_addToListButtonActionPerformed
+
+    private void removeFromListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromListButtonActionPerformed
+        
+        int index = echipaList.getSelectedIndex();
+        
+        CadruDidactic cd = echipa.get(index);
+        
+        echipa.remove(cd);
+        cadriDidactici.add(cd);
+        
+        echipaList.setModel(new CadriDidacticiListModel(echipa));
+        cadriDidacticiList.setModel(new CadriDidacticiListModel(cadriDidactici));
+        
+    }//GEN-LAST:event_removeFromListButtonActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+       
+        ok = true;
+        updateTask();
+        dispose();
+        
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        
+        dispose();
+        
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addToListButton;
+    private javax.swing.JList cadriDidacticiList;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField denumireTextField;
     private javax.swing.JTextField descriereTextField;
+    private javax.swing.JList echipaList;
     private javax.swing.JFormattedTextField endTimeFormattedTextField;
     private javax.swing.JButton financialResourcesButton;
     private javax.swing.JLabel jLabel1;
@@ -184,8 +315,6 @@ public class ProjectTask extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton logisticResourcesButton;

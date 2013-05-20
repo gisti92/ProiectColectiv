@@ -5,7 +5,9 @@
 package gui.director;
 
 import gui.director.models.PhasesTableModel;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import model.director.Faza;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
@@ -19,13 +21,16 @@ public class ProjectForm extends javax.swing.JDialog {
 
     private Proiect prj;
     private boolean ok = false;
+    private List<Faza> phases = new ArrayList<Faza>();
     /**
      * Creates new form ProjectForm
      */
-    public ProjectForm(Proiect prj, boolean update) {
+    public ProjectForm(Proiect prj , boolean update) {
         initComponents();
         
         this.prj = prj;
+        
+        phases.addAll(this.prj.getFaze());
         
         if (prj.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV)) {
             jLabel5.setText("Activitati");
@@ -35,14 +40,14 @@ public class ProjectForm extends javax.swing.JDialog {
             jLabel5.setText("Faze");
         }
         
+        phasesTable.setModel(new PhasesTableModel(phases));
+        
         if (update) {
             
             denumireTextField.setText(prj.getDenumire());
             descriptionEdit.setText(prj.getDescriere());
             startTimeFormattedTextField.setValue(prj.getInterval().getStart());
             endTimeFormattedTextField.setValue(prj.getInterval().getEnd());
-            
-            phasesTable.setModel(new PhasesTableModel(prj.getFaze()));
             
         }
         
@@ -55,6 +60,8 @@ public class ProjectForm extends javax.swing.JDialog {
         interval.setStart((Date)startTimeFormattedTextField.getValue());
         interval.setEnd((Date)endTimeFormattedTextField.getValue());
         prj.setInterval(interval);
+        prj.getFaze().clear();
+        prj.getFaze().addAll(phases);
     }
 
     /**
@@ -116,6 +123,11 @@ public class ProjectForm extends javax.swing.JDialog {
         jScrollPane2.setViewportView(phasesTable);
 
         adaugaButton.setText("Adauga");
+        adaugaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adaugaButtonActionPerformed(evt);
+            }
+        });
 
         modificaButton.setText("Modifica");
         modificaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -125,6 +137,11 @@ public class ProjectForm extends javax.swing.JDialog {
         });
 
         stergeButton.setText("Sterge");
+        stergeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stergeButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -218,13 +235,14 @@ public class ProjectForm extends javax.swing.JDialog {
         ok = true;
         updateProject();
         
-        setVisible(false);
+        dispose();
         
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         
-        setVisible(false);
+        //TODO: warning
+        dispose();
         
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -233,11 +251,44 @@ public class ProjectForm extends javax.swing.JDialog {
         int row = phasesTable.getSelectedRow();
         Faza f = ((PhasesTableModel) phasesTable.getModel()).getFaza(row);
         
-        ProjectPhase phase = new ProjectPhase(f);
+        ProjectPhase phase = new ProjectPhase(f, true);
         phase.setModal(true);
         phase.setVisible(true);
         
+        phasesTable.setModel(new PhasesTableModel(phases));
+        
     }//GEN-LAST:event_modificaButtonActionPerformed
+
+    private void adaugaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaButtonActionPerformed
+        
+        Faza f = new Faza();
+        
+        if (prj.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV)) {
+            f.setTip(Faza.PhaseType.ADMINISTRATIVE_ACTIVITY);
+        } else {
+            f.setTip(Faza.PhaseType.PHASE);
+        }
+        
+        ProjectPhase phase = new ProjectPhase(f, false);
+        phase.setModal(true);
+        phase.setVisible(true);
+        
+        if (phase.isOk()) {
+            phases.add(f);
+            phasesTable.setModel(new PhasesTableModel(phases));
+        }
+        
+    }//GEN-LAST:event_adaugaButtonActionPerformed
+
+    private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
+        
+        int row = phasesTable.getSelectedRow();
+        Faza f = ((PhasesTableModel) phasesTable.getModel()).getFaza(row);
+        
+        phases.remove(f);
+        phasesTable.setModel(new PhasesTableModel(phases));
+        
+    }//GEN-LAST:event_stergeButtonActionPerformed
 
     public boolean isOk() {
         return ok;

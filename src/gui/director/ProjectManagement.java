@@ -94,8 +94,18 @@ public class ProjectManagement extends javax.swing.JFrame {
         });
 
         deleteButton.setText("Sterge");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,7 +183,44 @@ public class ProjectManagement extends javax.swing.JFrame {
         frm.setModal(true);
         frm.setVisible(true);
         
+        if (frm.isOk()) {
+            try {
+                DirectorRepositoryDB.getInstance().updateProject(p);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+            } catch (SQLException ex) {
+                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        
+        int row = projectsTable.getSelectedRow();
+        Proiect p = ((ProjectsTableModel) projectsTable.getModel()).getProject(row);
+        
+        //TODO: are you sure dialog
+        
+        try {
+            DirectorRepositoryDB.getInstance().deleteProject(p);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;

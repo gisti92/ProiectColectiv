@@ -6,7 +6,7 @@ package gui.director;
 
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
 public class FinancialResourceDialog extends javax.swing.JFrame {
 

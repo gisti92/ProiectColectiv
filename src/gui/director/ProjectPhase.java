@@ -5,23 +5,67 @@
 package gui.director;
 
 import gui.director.models.TasksTableModel;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.director.Faza;
+import model.director.Task;
+import model.director.TimeInterval;
 
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
 public class ProjectPhase extends javax.swing.JDialog {
 
     /**
      * Creates new form ProjectPhases
      */
-    public ProjectPhase(Faza f) {
+    
+    private Faza faza;
+    private List<Task> tasks = new ArrayList<Task>();
+    private boolean ok = false;
+    
+    public ProjectPhase(Faza f, boolean update) {
         initComponents();
         
-        tasksTable.setModel(new TasksTableModel(f.getTaskuri()));
+        faza = f;
+        tasks.addAll(faza.getTaskuri());
+        
+        tasksTable.setModel(new TasksTableModel(tasks));
+        
+        if (update) {
+            updateComponents();
+        }
+    }
+    
+    private void updateComponents() {
+         denumireTextField.setText(faza.getDenumire());
+         descriereTextField.setText(faza.getDescriere());
+         startTimeFormattedTextField.setValue(faza.getInterval().getStart());
+         endTimeFormattedTextField.setValue(faza.getInterval().getEnd());
+    }
+    
+    private void updatePhase() {
+        
+        faza.setDenumire(denumireTextField.getText());
+        faza.setDescriere(descriereTextField.getText());
+        TimeInterval interval = new TimeInterval();
+        interval.setStart((Date)startTimeFormattedTextField.getValue());
+        interval.setEnd((Date)endTimeFormattedTextField.getValue());
+        faza.setInterval(interval);
+        faza.getTaskuri().clear();
+        faza.getTaskuri().addAll(tasks);
+        
     }
 
+    public boolean isOk() {
+        return ok;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,10 +114,25 @@ public class ProjectPhase extends javax.swing.JDialog {
         jScrollPane1.setViewportView(tasksTable);
 
         adaugaButton.setText("Adauga");
+        adaugaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adaugaButtonActionPerformed(evt);
+            }
+        });
 
         modificaButton.setText("Modifica");
+        modificaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificaButtonActionPerformed(evt);
+            }
+        });
 
         stergeButton.setText("Sterge");
+        stergeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stergeButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -83,10 +142,19 @@ public class ProjectPhase extends javax.swing.JDialog {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Timp inceput:");
 
         jLabel5.setText("Timp sfirsit:");
+
+        startTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
+
+        endTimeFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("MM/dd/yyyy"))));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,8 +237,70 @@ public class ProjectPhase extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        ok = true;
+        updatePhase();
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void adaugaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaButtonActionPerformed
+        
+        Task t = new Task();
+        if (faza.getTip().equals(Faza.PhaseType.ADMINISTRATIVE_ACTIVITY)) {
+            t.setTip(Task.TaskType.ADMINISTRATIVE_TASK);
+        } else {
+            t.setTip(Task.TaskType.SCIENTIFIC_ACTIVITY);
+        }
+        try {
+            ProjectTask taskDialog = new ProjectTask(t, false);
+            
+            taskDialog.setModal(true);
+            taskDialog.setVisible(true);
+            
+            if (taskDialog.isOk()) {
+                tasks.add(t);
+                tasksTable.setModel(new TasksTableModel(tasks));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectPhase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
+    }//GEN-LAST:event_adaugaButtonActionPerformed
+
+    private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
+        
+        int row = tasksTable.getSelectedRow();
+        Task t = ((TasksTableModel)tasksTable.getModel()).getTask(row);
+        
+         try {
+            ProjectTask taskDialog = new ProjectTask(t, true);
+            
+            taskDialog.setModal(true);
+            taskDialog.setVisible(true);
+            
+            if (taskDialog.isOk()) {
+                tasksTable.setModel(new TasksTableModel(tasks));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjectPhase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_modificaButtonActionPerformed
+
+    private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
+        
+        int row = tasksTable.getSelectedRow();
+        Task t = ((TasksTableModel)tasksTable.getModel()).getTask(row);
+        
+        tasks.remove(t);
+        
+        tasksTable.setModel(new TasksTableModel(tasks));      
+    }//GEN-LAST:event_stergeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaButton;

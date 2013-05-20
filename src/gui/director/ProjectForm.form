@@ -183,6 +183,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Adauga"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adaugaButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="modificaButton">
       <Properties>
@@ -196,6 +199,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Sterge"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stergeButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="okButton">
       <Properties>

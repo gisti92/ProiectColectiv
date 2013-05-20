@@ -100,5 +100,10 @@ public class CadruDidactic {
     public void setTitVac(String titVac) {
         this.titVac = titVac;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof CadruDidactic) && ((CadruDidactic)obj).getNume().equals(this.getNume());
+    }
     
 }
