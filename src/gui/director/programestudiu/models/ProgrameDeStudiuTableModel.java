@@ -24,6 +24,10 @@ public class ProgrameDeStudiuTableModel extends AbstractTableModel {
         this.programe = programe;
     }
     
+    public ProgramDeStudiuModel getProgram(int index) {
+        return programe.get(index);
+    }
+    
     @Override
     public int getRowCount() {
         return programe.size();

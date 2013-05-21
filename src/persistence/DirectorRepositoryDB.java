@@ -4,6 +4,8 @@
  */
 package persistence;
 
+import gui.director.programestudiu.ProgramDeStudiu;
+import gui.director.programestudiu.models.CercuriStudentestiTableModel;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,6 +27,10 @@ import model.director.Sala;
 import model.director.Task;
 import model.director.Task.TaskType;
 import model.director.TimeInterval;
+import model.director.programestudiu.CercStudentesc;
+import model.director.programestudiu.Disciplina;
+import model.director.programestudiu.ProgramDeStudiuModel;
+import model.director.programestudiu.Semestru;
 
 /**
  *
@@ -591,6 +597,251 @@ public class DirectorRepositoryDB extends RepositoryBD {
     public void updateProject(Proiect p) throws SQLException {
         deleteProject(p);
         addProject(p);
+    }
+    
+    public List<ProgramDeStudiuModel> getPrograme() throws SQLException {
+        
+        List<ProgramDeStudiuModel> result = new ArrayList<ProgramDeStudiuModel>();
+        
+        String query = "SELECT * FROM ProgramDeStudii";
+        
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            
+            ProgramDeStudiuModel model = new ProgramDeStudiuModel();
+            
+            int id = rs.getInt("id");
+            String denumire = rs.getString("denumire");
+            
+            model.setId(id);
+            model.setDenumire(denumire);
+            
+            model.getCercuri().addAll(getCercuri(id));
+            model.getSemestre().addAll(getSemestre(id));
+
+            result.add(model);
+        }
+        
+        return result;
+        
+    }
+    
+    public List<Semestru> getSemestre(int programId) throws SQLException {
+        
+        List<Semestru> result = new ArrayList<Semestru>();
+        
+        String query = "SELECT * FROM Semestre WHERE program_id = " + programId;
+        
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            
+            Semestru sem = new Semestru();
+            
+            int id = rs.getInt("id");
+            String denumire = rs.getString("denumire");
+            
+            sem.setId(id);
+            sem.setDenumire(denumire);
+            
+            sem.getDiscipline().addAll(getDiscipline(id));
+
+            result.add(sem);
+        }
+        
+        return result;
+        
+    }
+    
+    public List<CercStudentesc> getCercuri(int programId) throws SQLException {
+        
+        List<CercStudentesc> result = new ArrayList<>();
+        
+        String query = "SELECT * FROM CercuriStudentesti WHERE program_id = " + programId;
+        
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            
+            CercStudentesc cerc = new CercStudentesc();
+            
+            int id = rs.getInt("id");
+            String denumire = rs.getString("denumire");
+            
+            cerc.setId(id);
+            cerc.setDenumire(denumire);
+            
+            result.add(cerc);
+        }
+        
+        return result;
+    }
+    
+    public List<Disciplina> getDiscipline(int semestruId) throws SQLException {
+        
+         List<Disciplina> result = new ArrayList<>();
+        
+        String query = "SELECT * FROM SemestruDiscipline WHERE semestru_id = " + semestruId;
+        
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            
+            Disciplina disc = new Disciplina();
+            
+            int id = rs.getInt("id");
+            String denumire = rs.getString("denumire");
+            int nrCredite = rs.getInt("nr_credite");
+            
+            disc.setId(id);
+            disc.setDenumire(denumire);
+            disc.setNrCredite(nrCredite);
+            
+            result.add(disc);
+        }
+        
+        return result;
+        
+    }
+    
+    public void addProgramDeStudiu(ProgramDeStudiuModel p) throws SQLException {
+        
+        Connection con = getConnection();
+        con.setAutoCommit(false);
+        
+        String query = "INSERT INTO ProgramDeStudii VALUES(?)";
+        PreparedStatement stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, p.getDenumire());
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            int id = rs.getInt(1);
+            p.setId(id);
+            for (Semestru sem : p.getSemestre()) {
+                addSemestru(p, sem, con);
+            }
+            for (CercStudentesc cerc : p.getCercuri()) {
+                addCercStudentesc(p, cerc, con);
+            }
+        }
+        
+        con.commit();
+        
+    }
+    
+    public void addSemestru(ProgramDeStudiuModel p, Semestru sem, Connection con) throws SQLException {
+
+        String query = "INSERT INTO Semestre VALUES(?,?)";
+        PreparedStatement stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, sem.getDenumire());
+        stmt.setInt(2, p.getId());
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            int id = rs.getInt(1);
+            sem.setId(id);
+         
+            for (Disciplina disc : sem.getDiscipline()) {
+                addDisciplina(sem, disc, con);
+            }
+        }
+        
+    }
+    
+    public void addCercStudentesc(ProgramDeStudiuModel p, CercStudentesc cerc, Connection con) throws SQLException {
+        String query = "INSERT INTO CercuriStudentesti VALUES(?,?)";
+        PreparedStatement stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, cerc.getDenumire());
+        stmt.setInt(2, p.getId());
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            int id = rs.getInt(1);
+            cerc.setId(id);
+        }
+    }
+    
+    public void addDisciplina(Semestru sem, Disciplina disc, Connection con) throws SQLException {
+        String query = "INSERT INTO SemestruDiscipline VALUES(?,?,?)";
+        PreparedStatement stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, disc.getDenumire());
+        stmt.setInt(2, disc.getNrCredite());
+        stmt.setInt(3, sem.getId());
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            int id = rs.getInt(1);
+            disc.setId(id);
+        }
+    }
+    
+    public void removeProgramDeStudiu(ProgramDeStudiuModel p) throws SQLException {
+        
+        String query = "DELETE FROM ProgramDeStudii WHERE id = " + p.getId();
+        
+        Connection con = getConnection();
+        
+        con.setAutoCommit(false);
+        
+        for (Semestru sem : p.getSemestre()) {
+            removeSemestre(sem, con);
+        }
+        
+        removeCercuriStudentesc(p, con);
+        
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.executeUpdate();
+        
+        con.commit();
+        
+    }
+    
+    public void removeSemestre(Semestru sem, Connection con) throws SQLException {
+        
+        String query = "DELETE FROM Semestre WHERE id = " + sem.getId();
+        
+        removeDiscipline(sem, con);
+        
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.executeUpdate();
+    }
+    
+    public void removeCercuriStudentesc(ProgramDeStudiuModel p, Connection con) throws SQLException {
+        String query = "DELETE FROM CercuriStudentesti WHERE program_id = " + p.getId();
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.executeUpdate();
+    }
+    
+    public void removeDiscipline(Semestru sem, Connection con) throws SQLException {
+        String query = "DELETE FROM SemestruDiscipline WHERE semestru_id = " + sem.getId();
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.executeUpdate();
+    }
+ 
+    public void updateProgramDeStudiu(ProgramDeStudiuModel p) throws SQLException {
+       removeProgramDeStudiu(p);
+       addProgramDeStudiu(p);
     }
     
 }

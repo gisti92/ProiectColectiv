@@ -218,6 +218,30 @@ CREATE PROCEDURE creareTabele AS
 		cadru_didactic_id INT
 	)
 	
+	CREATE TABLE SemestruDiscipline (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		denumire VARCHAR(100),
+		nr_credite INT,
+		semestru_id INT
+	)
+	
+	CREATE TABLE Semestre (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		denumire VARCHAR(100),
+		program_id INT
+	)
+	
+	CREATE TABLE ProgramDeStudii (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		denumire VARCHAR(100)
+	)
+	
+	CREATE TABLE CercuriStudentesti (
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		denumire VARCHAR(100),
+		program_id INT
+	)
+	
 	SET NoCount OFF
 GO
 --**********************************************************************************************************

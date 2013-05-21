@@ -5,9 +5,14 @@
 package gui.director.programestudiu;
 
 import gui.director.programestudiu.models.ProgrameDeStudiuTableModel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.director.programestudiu.ProgramDeStudiuModel;
+import persistence.DirectorRepositoryDB;
+import persistence.RepositoryBD;
 
 /**
  *
@@ -15,14 +20,16 @@ import model.director.programestudiu.ProgramDeStudiuModel;
  */
 public class ProgrameDeStudiu extends javax.swing.JDialog {
 
-    private List<ProgramDeStudiuModel> programe = new ArrayList<ProgramDeStudiuModel>();
     /**
      * Creates new form ProgrameDeStudiu
      */
     public ProgrameDeStudiu() {
         initComponents();
-    
-        programeTable.setModel(new ProgrameDeStudiuTableModel(programe));
+        try {
+            programeTable.setModel(new ProgrameDeStudiuTableModel(DirectorRepositoryDB.getInstance().getPrograme()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     
     }
     
@@ -148,8 +155,16 @@ public class ProgrameDeStudiu extends javax.swing.JDialog {
         stud.setVisible(true);
         
         if (stud.isOk()) {
-            programe.add(program);
-            programeTable.setModel(new ProgrameDeStudiuTableModel(programe));
+            try {
+                DirectorRepositoryDB.getInstance().addProgramDeStudiu(program);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                programeTable.setModel(new ProgrameDeStudiuTableModel(DirectorRepositoryDB.getInstance().getPrograme()));
+            } catch (SQLException ex) {
+                Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }//GEN-LAST:event_adaugaButtonActionPerformed
@@ -158,14 +173,26 @@ public class ProgrameDeStudiu extends javax.swing.JDialog {
         
         int row = programeTable.getSelectedRow();
         
-        ProgramDeStudiuModel program = programe.get(row);
+        ProgramDeStudiuModel program = ((ProgrameDeStudiuTableModel)programeTable.getModel()).getProgram(row);
         
         ProgramDeStudiu stud = new ProgramDeStudiu(null, true, program, true);
         
         stud.setVisible(true);
         
         if (stud.isOk()) {
-            programeTable.setModel(new ProgrameDeStudiuTableModel(programe));
+            
+            try {
+                DirectorRepositoryDB.getInstance().updateProgramDeStudiu(program);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            try {
+                programeTable.setModel(new ProgrameDeStudiuTableModel(DirectorRepositoryDB.getInstance().getPrograme()));
+            } catch (SQLException ex) {
+                Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
         
         
@@ -175,11 +202,18 @@ public class ProgrameDeStudiu extends javax.swing.JDialog {
         
         int row = programeTable.getSelectedRow();
         
-        ProgramDeStudiuModel program = programe.get(row);
+        ProgramDeStudiuModel program = ((ProgrameDeStudiuTableModel)programeTable.getModel()).getProgram(row);
+        try {
+            DirectorRepositoryDB.getInstance().removeProgramDeStudiu(program);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        programe.remove(program);
-        
-        programeTable.setModel(new ProgrameDeStudiuTableModel(programe));
+        try {
+            programeTable.setModel(new ProgrameDeStudiuTableModel(DirectorRepositoryDB.getInstance().getPrograme()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ProgrameDeStudiu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_stergeButtonActionPerformed
 
