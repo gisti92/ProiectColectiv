@@ -212,11 +212,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Resurse logistice"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logisticResourcesButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="financialResourcesButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Resurse financiare"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="financialResourcesButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="okButton">
       <Properties>

@@ -23,6 +23,7 @@ import model.director.ResursaFinanciara;
 import model.director.ResursaLogistica;
 import model.director.Sala;
 import model.director.Task;
+import model.director.Task.TaskType;
 import model.director.TimeInterval;
 
 /**
@@ -45,11 +46,11 @@ public class DirectorRepositoryDB extends RepositoryBD {
         return instance;
     }
     
-    public List<Proiect> getProjects() throws SQLException {
+    public List<Proiect> getProjects(ProjectType type) throws SQLException {
        
         ArrayList<Proiect> result = new ArrayList();
        
-        PreparedStatement stmt = getConnection().prepareStatement("SELECT * FROM Projects");
+        PreparedStatement stmt = getConnection().prepareStatement("SELECT * FROM Projects WHERE tip = " + (type.equals(ProjectType.EVENIMENT_ADMINISTRATIV) ? 1 : 2));
         
         ResultSet res = stmt.executeQuery();
         
@@ -143,6 +144,14 @@ public class DirectorRepositoryDB extends RepositoryBD {
             t.setId(res.getInt("id"));
             t.setDenumire(res.getString("denumire"));
             t.setDescriere(res.getString("descriere"));
+            
+            int tip = res.getInt("tip");
+            if (tip == 1) {
+                t.setTip(TaskType.ADMINISTRATIVE_TASK);
+            }
+            if (tip == 2) {
+                t.setTip(TaskType.SCIENTIFIC_ACTIVITY);
+            }
             
             TimeInterval interval = new TimeInterval();
             
@@ -299,6 +308,49 @@ public class DirectorRepositoryDB extends RepositoryBD {
         
         return result;
     }
+    
+     public List<ResursaLogistica> getAllLogisticResources() throws SQLException {
+        
+        String query = "SELECT * FROM Sali";
+        
+        PreparedStatement stmt = getConnection().prepareStatement(query);
+        ResultSet res = stmt.executeQuery();
+        
+        List<ResursaLogistica> result = new ArrayList<ResursaLogistica>();
+        
+        while (res.next()) {
+            
+            Sala s = new Sala();
+            
+            s.setId(res.getInt("Id_Sala"));
+            s.setCapacitate(res.getInt("capacitate"));
+            s.setDenumire(res.getString("denumire"));
+            
+            result.add(s);
+            
+        }
+        
+        res.close();
+        
+        query = "SELECT * FROM Echipamente";
+        
+        stmt = getConnection().prepareStatement(query);
+        res = stmt.executeQuery();
+        
+        while (res.next()) {
+            Echipament e = new Echipament();
+            
+            e.setDenumire(res.getString("denumire"));
+            e.setId(res.getInt("Id_Echipament"));
+            
+            result.add(e);
+        }
+        
+        res.close();
+        
+        
+        return result;
+    }   
     
     public void deleteProject(Proiect prj) throws SQLException {
         
@@ -457,7 +509,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
         PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         
         stmt.setInt(1, f.getId());
-        stmt.setInt(2, t.getTip().equals(PhaseType.ADMINISTRATIVE_ACTIVITY) ? 1 : 2);
+        stmt.setInt(2, t.getTip().equals(TaskType.ADMINISTRATIVE_TASK) ? 1 : 2);
         stmt.setString(3, t.getDenumire());
         stmt.setString(4, t.getDescriere());
         

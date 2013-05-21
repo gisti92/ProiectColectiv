@@ -9,5 +9,10 @@ package model.director;
  * @author Artiom.Casapu
  */
 public class Echipament extends ResursaLogistica {
+
+    @Override
+    public String toString() {
+        return getDenumire();
+    }
     
 }

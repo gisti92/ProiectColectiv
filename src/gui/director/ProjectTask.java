@@ -47,7 +47,7 @@ public class ProjectTask extends javax.swing.JDialog {
         
         if (update) {
             updateComponents();
-            echipa = t.getEchipa();
+            echipa.addAll(t.getEchipa());
             cadriDidactici.removeAll(echipa);
         }
         
@@ -141,8 +141,18 @@ public class ProjectTask extends javax.swing.JDialog {
         jLabel5.setText("Echipa:");
 
         logisticResourcesButton.setText("Resurse logistice");
+        logisticResourcesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logisticResourcesButtonActionPerformed(evt);
+            }
+        });
 
         financialResourcesButton.setText("Resurse financiare");
+        financialResourcesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                financialResourcesButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -299,6 +309,22 @@ public class ProjectTask extends javax.swing.JDialog {
         dispose();
         
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void financialResourcesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_financialResourcesButtonActionPerformed
+        
+        ProjectFinancialResources diag = new ProjectFinancialResources(task);
+        diag.setModal(true);
+        diag.setVisible(true);
+        
+    }//GEN-LAST:event_financialResourcesButtonActionPerformed
+
+    private void logisticResourcesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logisticResourcesButtonActionPerformed
+       
+        ProjectLogisticResources diag = new ProjectLogisticResources(task);
+        diag.setModal(true);
+        diag.setVisible(true);
+        
+    }//GEN-LAST:event_logisticResourcesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addToListButton;

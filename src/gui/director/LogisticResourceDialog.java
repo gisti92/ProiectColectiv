@@ -4,19 +4,80 @@
  */
 package gui.director;
 
+import gui.director.models.EchipamenteTableModel;
+import gui.director.models.SaliTableModel;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import model.director.Echipament;
+import model.director.ResursaLogistica;
+import model.director.Sala;
+import persistence.DirectorRepositoryDB;
+
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
-public class LogisticResourceDialog extends javax.swing.JFrame {
+public class LogisticResourceDialog extends javax.swing.JDialog {
 
+    private boolean ok = false;
+    private ResursaLogistica logisticResource;
+    
+    private final static String SALA = "Sala";
+    private final static String ECHIPAMENT = "Echipament";
+    
+    private List<ResursaLogistica> sali = new ArrayList<ResursaLogistica>();
+    private List<ResursaLogistica> echipamente = new ArrayList<ResursaLogistica>();
+    
     /**
      * Creates new form LogisticResourceDialog
      */
-    public LogisticResourceDialog() {
+    public LogisticResourceDialog() throws SQLException {
         initComponents();
+        
+        tipResursaComboBox.setModel(new DefaultComboBoxModel(new String[] {  
+            SALA,
+            ECHIPAMENT
+        }));
+        
+        tipResursaComboBox.setSelectedIndex(0);
+        
+        List<ResursaLogistica> resurse = DirectorRepositoryDB.getInstance().getAllLogisticResources();
+        
+        for (ResursaLogistica res : resurse) {
+            if (res instanceof Sala) {
+                sali.add(res);
+            }
+            if (res instanceof Echipament) {
+                echipamente.add(res);
+            }
+        }
+        
+        logisticResourcesTable.setModel(new SaliTableModel(sali));
     }
 
+    public ResursaLogistica getSelected() {
+        return logisticResource;
+    }
+    
+    public boolean isOk() {
+        return ok;
+    }
+    
+    private void updateLogisticResource() {
+        
+        int row = logisticResourcesTable.getSelectedRow();
+        
+        if (tipResursaComboBox.getSelectedIndex() == 0) {
+            logisticResource = sali.get(row);
+        } else {
+            logisticResource = echipamente.get(row);
+        }
+        
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,8 +91,9 @@ public class LogisticResourceDialog extends javax.swing.JFrame {
         tipResursaComboBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        logisticResourcesTable = new javax.swing.JTable();
+        okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout salaPanel1Layout = new javax.swing.GroupLayout(salaPanel1);
         salaPanel1.setLayout(salaPanel1Layout);
@@ -44,13 +106,18 @@ public class LogisticResourceDialog extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         tipResursaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        tipResursaComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                tipResursaComboBoxItemStateChanged(evt);
+            }
+        });
 
         jLabel1.setText("Tip");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        logisticResourcesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -61,9 +128,21 @@ public class LogisticResourceDialog extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(logisticResourcesTable);
 
-        jButton1.setText("OK");
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,7 +159,9 @@ public class LogisticResourceDialog extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(okButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -93,18 +174,48 @@ public class LogisticResourceDialog extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
                 .addGap(9, 9, 9))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tipResursaComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tipResursaComboBoxItemStateChanged
+        
+        if (tipResursaComboBox.getSelectedIndex() == 0) {
+            logisticResourcesTable.setModel(new SaliTableModel(sali));
+        } else {
+            logisticResourcesTable.setModel(new EchipamenteTableModel(echipamente));
+        }
+        
+    }//GEN-LAST:event_tipResursaComboBoxItemStateChanged
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
+        ok = true;
+        
+        updateLogisticResource();
+        
+        dispose();
+        
+        
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        
+        dispose();
+        
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable logisticResourcesTable;
+    private javax.swing.JButton okButton;
     private javax.swing.JPanel salaPanel1;
     private javax.swing.JComboBox tipResursaComboBox;
     // End of variables declaration//GEN-END:variables

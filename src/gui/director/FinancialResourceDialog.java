@@ -4,17 +4,58 @@
  */
 package gui.director;
 
+import javax.swing.DefaultComboBoxModel;
+import model.director.ResursaFinanciara;
+import model.director.ResursaFinanciara.TipCheltuiala;
+
 /**
  *
  * @author Artiom.Casapu
  */
-public class FinancialResourceDialog extends javax.swing.JFrame {
+public class FinancialResourceDialog extends javax.swing.JDialog {
 
+    private ResursaFinanciara resursa;
+    private boolean ok = false;
     /**
      * Creates new form FinancialResourceDialog
      */
-    public FinancialResourceDialog() {
+    public FinancialResourceDialog(ResursaFinanciara f, boolean update) {
         initComponents();
+        
+        resursa = f;
+        
+        sumaComboBox.setModel(new DefaultComboBoxModel(new ResursaFinanciara.TipCheltuiala[] { 
+            TipCheltuiala.CHELTUIALA_CU_MANOPERA,
+            TipCheltuiala.CHELTUIALA_DE_LOGISTICA,
+            TipCheltuiala.CHELTUIELA_CU_MOBILITATE
+        }));
+        
+        sumaComboBox.setSelectedIndex(0);
+    
+        if (update) {
+            updateComponents();
+        }
+        
+    }
+    
+    private void updateComponents() {
+        
+        descriereTextField.setText(resursa.getDescriere());
+        sumaTextField.setText(Integer.toString(resursa.getSuma()));
+        sumaComboBox.setSelectedItem(resursa.getTip());
+        
+    }
+    
+    private void updateResursa() {
+        
+        resursa.setDescriere(descriereTextField.getText());
+        resursa.setSuma(Integer.parseInt(sumaTextField.getText()));
+        resursa.setTip((TipCheltuiala)sumaComboBox.getSelectedItem());
+        
+    }
+    
+    public boolean isOk() {
+        return ok;
     }
 
     /**
@@ -35,7 +76,7 @@ public class FinancialResourceDialog extends javax.swing.JFrame {
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Descriere:");
 
@@ -46,8 +87,18 @@ public class FinancialResourceDialog extends javax.swing.JFrame {
         sumaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,6 +148,20 @@ public class FinancialResourceDialog extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
+        ok = true;
+        updateResursa();
+        dispose();
+        
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        
+        dispose();
+        
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

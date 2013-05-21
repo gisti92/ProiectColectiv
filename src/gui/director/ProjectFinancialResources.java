@@ -4,19 +4,45 @@
  */
 package gui.director;
 
+import gui.director.models.FinancialResourcesTableModel;
+import java.util.ArrayList;
+import java.util.List;
+import model.director.ResursaFinanciara;
+import model.director.Task;
+
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
-public class ProjectFinancialResources extends javax.swing.JFrame {
+public class ProjectFinancialResources extends javax.swing.JDialog {
 
+    private List<ResursaFinanciara> financials = new ArrayList<ResursaFinanciara>();
+    private boolean ok = false;
+    private Task task;
     /**
      * Creates new form ProjectFinancialResources
      */
-    public ProjectFinancialResources() {
+    public ProjectFinancialResources(Task t) {
         initComponents();
+        
+        task = t;
+        
+        financials.addAll(t.getResurseFinanciare());
+        
+        financialsTable.setModel(new FinancialResourcesTableModel(financials));
+    }
+    
+    private void updateTask() {
+        
+        task.getResurseFinanciare().clear();
+        task.getResurseFinanciare().addAll(financials);
+       
+        
     }
 
+    public boolean isOk() {
+        return ok;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,27 +57,47 @@ public class ProjectFinancialResources extends javax.swing.JFrame {
         adaugaButton = new javax.swing.JButton();
         modificaButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        logisticResourcesTable = new javax.swing.JTable();
-        stergeButton1 = new javax.swing.JButton();
-        okButton1 = new javax.swing.JButton();
-        adaugaButton1 = new javax.swing.JButton();
-        modificaButton1 = new javax.swing.JButton();
-        cancelButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        logisticResourcesTable1 = new javax.swing.JTable();
+        financialsTable = new javax.swing.JTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         stergeButton.setText("Sterge");
+        stergeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stergeButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         adaugaButton.setText("Adauga");
+        adaugaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adaugaButtonActionPerformed(evt);
+            }
+        });
 
         modificaButton.setText("Modifica");
+        modificaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificaButtonActionPerformed(evt);
+            }
+        });
 
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
-        logisticResourcesTable.setModel(new javax.swing.table.DefaultTableModel(
+        financialsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -62,32 +108,7 @@ public class ProjectFinancialResources extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(logisticResourcesTable);
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        stergeButton1.setText("Sterge");
-
-        okButton1.setText("OK");
-
-        adaugaButton1.setText("Adauga");
-
-        modificaButton1.setText("Modifica");
-
-        cancelButton1.setText("Cancel");
-
-        logisticResourcesTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(logisticResourcesTable1);
+        jScrollPane2.setViewportView(financialsTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,52 +118,104 @@ public class ProjectFinancialResources extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(adaugaButton1)
+                        .addComponent(adaugaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modificaButton1)
+                        .addComponent(modificaButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stergeButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(okButton1)
+                        .addComponent(stergeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
+                        .addComponent(okButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton1)
+                        .addComponent(cancelButton)
                         .addGap(14, 14, 14))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(adaugaButton1)
-                    .addComponent(modificaButton1)
-                    .addComponent(stergeButton1)
-                    .addComponent(okButton1)
-                    .addComponent(cancelButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(okButton)
+                            .addComponent(cancelButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(stergeButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(adaugaButton)
+                                .addComponent(modificaButton)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        
+        ok = true;
+        
+        updateTask();
+        
+        dispose();
+        
+    }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        
+        dispose();
+        
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void adaugaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaButtonActionPerformed
+        
+        ResursaFinanciara fin = new ResursaFinanciara();
+        FinancialResourceDialog diag = new FinancialResourceDialog(fin, false);
+        diag.setModal(true);
+        diag.setVisible(true);
+        if (diag.isOk()) {
+            financials.add(fin);
+            financialsTable.setModel(new FinancialResourcesTableModel(financials));
+        }
+        
+    }//GEN-LAST:event_adaugaButtonActionPerformed
+
+    private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
+        
+        int row = financialsTable.getSelectedRow();
+        ResursaFinanciara fin = financials.get(row);
+        
+        FinancialResourceDialog diag = new FinancialResourceDialog(fin, true);
+        diag.setModal(true);
+        diag.setVisible(true);
+        if (diag.isOk()) {
+            financialsTable.setModel(new FinancialResourcesTableModel(financials));
+        }
+        
+    }//GEN-LAST:event_modificaButtonActionPerformed
+
+    private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
+        
+        int row = financialsTable.getSelectedRow();
+        ResursaFinanciara fin = financials.get(row);
+        financials.remove(fin);
+        financialsTable.setModel(new FinancialResourcesTableModel(financials));
+        
+    }//GEN-LAST:event_stergeButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaButton;
-    private javax.swing.JButton adaugaButton1;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JButton cancelButton1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable financialsTable;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable logisticResourcesTable;
-    private javax.swing.JTable logisticResourcesTable1;
     private javax.swing.JButton modificaButton;
-    private javax.swing.JButton modificaButton1;
     private javax.swing.JButton okButton;
-    private javax.swing.JButton okButton1;
     private javax.swing.JButton stergeButton;
-    private javax.swing.JButton stergeButton1;
     // End of variables declaration//GEN-END:variables
 }

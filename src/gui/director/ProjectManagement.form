@@ -93,7 +93,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="titleLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Eveniment administrativ"/>
+        <Property name="text" type="java.lang.String" value="Evenimente administrative:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">

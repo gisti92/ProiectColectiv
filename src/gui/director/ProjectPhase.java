@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.director.Faza;
+import model.director.Faza.PhaseType;
 import model.director.Task;
 import model.director.TimeInterval;
 
@@ -31,6 +32,10 @@ public class ProjectPhase extends javax.swing.JDialog {
     
     public ProjectPhase(Faza f, boolean update) {
         initComponents();
+        
+        if (f.getTip().equals(PhaseType.PHASE)) {
+            jLabel3.setText("Activitati");
+        }
         
         faza = f;
         tasks.addAll(faza.getTaskuri());

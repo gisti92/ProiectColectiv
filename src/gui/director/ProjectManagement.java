@@ -14,19 +14,26 @@ import persistence.DirectorRepositoryDB;
 
 /**
  *
- * @author User
+ * @author Artiom.Casapu
  */
 public class ProjectManagement extends javax.swing.JFrame {
 
     
+    private ProjectType projectType;
     /**
      * Creates new form ProjectManagement
      */
     public ProjectManagement(Proiect.ProjectType projectType) {
         initComponents();
+        
+        this.projectType = projectType;
+        
         setTitle(projectType.toString());
+        if (projectType.equals(ProjectType.PROIECT_STIINTIFIC)) {
+            titleLabel.setText("Proiecte stiintifice");
+        }
         try {
-            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType)));
         } catch (SQLException ex) {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,7 +74,7 @@ public class ProjectManagement extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        titleLabel.setText("Eveniment administrativ");
+        titleLabel.setText("Evenimente administrative:");
 
         projectsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -153,7 +160,7 @@ public class ProjectManagement extends javax.swing.JFrame {
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
         
         Proiect p = new Proiect();
-        p.setTip(ProjectType.EVENIMENT_ADMINISTRATIV);
+        p.setTip(projectType);
         
         ProjectForm frm = new ProjectForm(p, false);
         frm.setModal(true);
@@ -166,7 +173,7 @@ public class ProjectManagement extends javax.swing.JFrame {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
-                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType)));
             } catch (SQLException ex) {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -190,7 +197,7 @@ public class ProjectManagement extends javax.swing.JFrame {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
-                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType)));
             } catch (SQLException ex) {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -215,7 +222,7 @@ public class ProjectManagement extends javax.swing.JFrame {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects()));
+            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType)));
         } catch (SQLException ex) {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
