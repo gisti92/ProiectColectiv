@@ -6,6 +6,7 @@ package gui;
 
 import businessLogic.Controller;
 import gui.director.ProjectManagement;
+import gui.director.programestudiu.ProgrameDeStudiu;
 import javax.swing.JFrame;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
@@ -68,7 +69,6 @@ public class UiDirector extends javax.swing.JFrame {
         granturiCercetareButton = new javax.swing.JButton();
         evenimentAdministrativButton = new javax.swing.JButton();
         programDeStudiu = new javax.swing.JButton();
-        cercuriStudentesti = new javax.swing.JButton();
         raportDeAlocareButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
 
@@ -89,8 +89,11 @@ public class UiDirector extends javax.swing.JFrame {
         });
 
         programDeStudiu.setText("Programe de studiu");
-
-        cercuriStudentesti.setText("Cercuri studentesti");
+        programDeStudiu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                programDeStudiuActionPerformed(evt);
+            }
+        });
 
         raportDeAlocareButton.setText("Rapoarte de alocare");
 
@@ -106,7 +109,6 @@ public class UiDirector extends javax.swing.JFrame {
                     .addComponent(granturiCercetareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(evenimentAdministrativButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(programDeStudiu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cercuriStudentesti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(raportDeAlocareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -124,10 +126,8 @@ public class UiDirector extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(programDeStudiu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cercuriStudentesti)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(raportDeAlocareButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addComponent(okButton)
                 .addGap(22, 22, 22))
         );
@@ -149,8 +149,15 @@ public class UiDirector extends javax.swing.JFrame {
         
     }//GEN-LAST:event_granturiCercetareButtonActionPerformed
 
+    private void programDeStudiuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_programDeStudiuActionPerformed
+        
+        ProgrameDeStudiu stud = new ProgrameDeStudiu();
+        stud.setModal(true);
+        stud.setVisible(true);
+        
+    }//GEN-LAST:event_programDeStudiuActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cercuriStudentesti;
     private javax.swing.JButton evenimentAdministrativButton;
     private javax.swing.JButton granturiCercetareButton;
     private javax.swing.JButton okButton;

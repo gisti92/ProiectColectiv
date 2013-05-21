@@ -28,7 +28,6 @@
                   <Component id="granturiCercetareButton" max="32767" attributes="0"/>
                   <Component id="evenimentAdministrativButton" max="32767" attributes="0"/>
                   <Component id="programDeStudiu" max="32767" attributes="0"/>
-                  <Component id="cercuriStudentesti" max="32767" attributes="0"/>
                   <Component id="raportDeAlocareButton" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -50,10 +49,8 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="programDeStudiu" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="cercuriStudentesti" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="raportDeAlocareButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="50" max="32767" attributes="0"/>
+              <EmptySpace pref="79" max="32767" attributes="0"/>
               <Component id="okButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
           </Group>
@@ -81,11 +78,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Programe de studiu"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="cercuriStudentesti">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Cercuri studentesti"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="programDeStudiuActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="raportDeAlocareButton">
       <Properties>
