@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.activitaticd;
+package gui.publicul.activitaticd;
 
 import businessLogic.Controller;
 import gui.publicul.informatiiresurse.models.ResurseUmaneTM;

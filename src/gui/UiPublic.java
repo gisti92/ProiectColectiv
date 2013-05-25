@@ -5,7 +5,7 @@
 package gui;
 
 import gui.publicul.informatiiresurse.InformatiResurse;
-import gui.activitaticd.CalendarulActivitatiilorDidactice;
+import gui.publicul.activitaticd.CalendarulActivitatiilorDidactice;
 import businessLogic.Controller;
 import javax.swing.JFrame;
 
