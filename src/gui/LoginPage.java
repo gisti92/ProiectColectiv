@@ -5,6 +5,8 @@
 package gui;
 
 import businessLogic.Controller;
+import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -41,9 +43,9 @@ public class LoginPage extends javax.swing.JFrame {
     }
 
     public static LoginPage getInstance() {
-    	if (instance==null){
-    		instance = new LoginPage();
-    	}
+        if (instance == null) {
+            instance = new LoginPage();
+        }
         return instance;
     }
 
@@ -76,6 +78,18 @@ public class LoginPage extends javax.swing.JFrame {
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
+            }
+        });
+
+        txtUser.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUserKeyPressed(evt);
+            }
+        });
+
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
             }
         });
 
@@ -141,16 +155,7 @@ public class LoginPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        try {
-            if (contr.authentication(txtUser.getText(), txtPassword.getPassword())) {
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "Autentificare esuata, introduceti din nou datele de intrare! ", "Eroare la logare", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare", JOptionPane.ERROR_MESSAGE);
-        }
+        startLogin();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnLoginAsPublicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAsPublicActionPerformed
@@ -162,6 +167,15 @@ public class LoginPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare la logare", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginAsPublicActionPerformed
+
+    private void txtUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserKeyPressed
+        keyPressed(evt);
+    }//GEN-LAST:event_txtUserKeyPressed
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+        keyPressed(evt);
+    }//GEN-LAST:event_txtPasswordKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnLoginAsPublic;
@@ -171,4 +185,27 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
+
+    private void startLogin() {
+        try {
+            if (contr.authentication(txtUser.getText(), txtPassword.getPassword())) {
+                this.setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "Autentificare esuata, introduceti din nou datele de intrare! ", "Eroare la logare", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void keyPressed(KeyEvent evt) throws HeadlessException {
+        if (evt.getKeyCode() == 10) {
+            if (txtUser.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Campurile Username si Password sunt obligatorii!", "Introduceti datele!", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                startLogin();
+            }
+        }
+    }
 }
