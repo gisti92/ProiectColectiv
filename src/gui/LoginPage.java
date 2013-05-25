@@ -31,6 +31,7 @@ public class LoginPage extends javax.swing.JFrame {
                 exit();
             }
         });
+        setLocationRelativeTo(null);
     }
 
     private void exit() {

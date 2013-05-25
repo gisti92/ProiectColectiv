@@ -47,7 +47,6 @@ public class StartApp {
                 try {
                     LoginPage lp = LoginPage.getInstance();
                     lp.setTitle("Pagina de logare");
-                    lp.setLocation(500, 200);
                     lp.setVisible(true);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Eroare la initializare", JOptionPane.ERROR_MESSAGE);
