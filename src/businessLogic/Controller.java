@@ -9,13 +9,17 @@ import gui.UiCadruDidactic;
 import gui.UiDirector;
 import gui.UiPublic;
 import java.util.List;
+import model.users.AdministratorUser;
 import model.CadruDidactic;
+import model.users.CadruDidacticUser;
+import model.users.DirectorUser;
 import model.Echipament;
 import model.publicul.filters.Filter;
 import model.Formatie;
 import model.Sala;
+import model.users.User;
 import model.publicul.OrarDisplay;
-import persistence.RepositoryBD;
+import persistence.BaseRepository;
 
 /**
  *
@@ -25,8 +29,8 @@ import persistence.RepositoryBD;
 public class Controller {
 
     private static Controller instance = new Controller();
-    private RepositoryBD rep = RepositoryBD.getInstance();
- 
+    private BaseRepository rep = BaseRepository.getInstance();
+
     protected Controller() {
     }
 
@@ -34,26 +38,21 @@ public class Controller {
         return instance;
     }
 
-    public boolean login(String user, char[] pass) throws Exception {
-        char act;
-        act = rep.getPermission(user, pass);
-        switch (act) {
-            case 'A': {
-                UiAdministrator.getInstance().reOpen(user);
-                return true;
-            }
-            case 'D': {
-                UiDirector.getInstance().reOpen(user);
-                return true;
-            }
-            case 'C': {
-                UiCadruDidactic.getInstance().reOpen(user);
-                return true;
-            }
-            default: {
-                return false;
-            }
+    public boolean login(String username, char[] pass) throws Exception {
+        User user = rep.getUserForLogin(username, pass);
+        if (user instanceof AdministratorUser) {
+            UiAdministrator.getInstance().reOpen(user);
+            return true;
+        } else if (user instanceof DirectorUser) {
+            UiDirector.getInstance().reOpen(user);
+            return true;
+        } else if (user instanceof CadruDidacticUser) {
+            UiCadruDidactic.getInstance().reOpen((CadruDidacticUser) user);
+            return true;
+        } else {
+            return false;
         }
+
     }
 
     public boolean loginAsPublic() {
@@ -68,11 +67,11 @@ public class Controller {
     public List<Sala> getSali() throws Exception {
         return rep.getSali();
     }
-    
-    public List<Echipament> getEchipamente() throws Exception{
+
+    public List<Echipament> getEchipamente() throws Exception {
         return rep.getEchipamente();
     }
-   
+
     public List<Formatie> getFormatii() throws Exception {
         return rep.getFormatii();
     }
@@ -80,6 +79,4 @@ public class Controller {
     public List<OrarDisplay> getOrar(Filter filter) throws Exception {
         return rep.getOrarFiltered(filter);
     }
-    
-
 }

@@ -4,8 +4,10 @@
  */
 package gui;
 
+import businessLogic.CadruDidacticController;
 import businessLogic.Controller;
 import javax.swing.JFrame;
+import model.users.CadruDidacticUser;
 
 /**
  *
@@ -13,15 +15,16 @@ import javax.swing.JFrame;
  */
 public class UiCadruDidactic extends javax.swing.JFrame  {
         
-    private static UiCadruDidactic instance = null;
-    private Controller contr = null;
+    private static UiCadruDidactic instance;
+    private CadruDidacticController contr;
 
     /**
      * Creates new form UiPublic
      */
     private UiCadruDidactic() {
-        contr = Controller.getInstance();
+        contr = CadruDidacticController.getInstance();
         initComponents();
+        setLocationRelativeTo(null);
         
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -36,7 +39,6 @@ public class UiCadruDidactic extends javax.swing.JFrame  {
     public static UiCadruDidactic getInstance() {
         if (instance == null) {
                     instance = new UiCadruDidactic();
-                    instance.setLocation(400, 300);
         }
         return instance;
     }
@@ -46,9 +48,9 @@ public class UiCadruDidactic extends javax.swing.JFrame  {
         LoginPage.getInstance().reOpen();
     }
     
-    public void reOpen(String name) {
-        setTitle(name);
-        setName(name);
+    public void reOpen(CadruDidacticUser user) {
+        setTitle(user.getName());
+        contr.setCurrentUser(user);
         setVisible(true);
         // resetarea fereastrei
     }

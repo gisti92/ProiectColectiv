@@ -21,7 +21,7 @@ import model.administrator.State;
  *
  * @author S7eve
  */
-public class AdministratorRepository extends RepositoryBD {
+public class AdministratorRepository extends BaseRepository {
 
     private static AdministratorRepository instance;
 

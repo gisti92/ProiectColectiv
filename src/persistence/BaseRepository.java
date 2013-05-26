@@ -4,7 +4,6 @@
  */
 package persistence;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,13 +15,17 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import model.users.AdministratorUser;
 import model.publicul.filters.AnFilter;
 import model.publicul.filters.CDFilter;
 import model.CadruDidactic;
+import model.users.CadruDidacticUser;
+import model.users.DirectorUser;
 import model.Echipament;
 import model.publicul.filters.Filter;
 import model.Formatie;
 import model.Sala;
+import model.users.User;
 import model.publicul.filters.FormatieFilter;
 import model.publicul.OrarDisplay;
 
@@ -30,21 +33,21 @@ import model.publicul.OrarDisplay;
  *
  * @author S7eve
  */
-public class RepositoryBD {
+public class BaseRepository {
 
-    private static RepositoryBD instance;
+    private static BaseRepository instance;
     private String propsFileName = "src/persistence/db.properties";
     private Properties props = null;
     private Connection myConnection;
 
-    protected RepositoryBD() {
+    protected BaseRepository() {
         props = getProperties();
         myConnection = getConnection();
     }
 
-    public static RepositoryBD getInstance() {
+    public static BaseRepository getInstance() {
         if (instance == null) {
-            instance = new RepositoryBD();
+            instance = new BaseRepository();
         }
         return instance;
     }
@@ -72,19 +75,37 @@ public class RepositoryBD {
         return con;
     }
 
-    public char getPermission(String user, char[] pass) throws Exception {
-        myConnection = getConnection();
+    public User getUserForLogin(String user, char[] pass) throws Exception {
         ResultSet rs = null;
         try {
-            PreparedStatement statement = myConnection.prepareStatement("SELECT permissiune FROM logins WHERE userid = ? AND pass = ?");
+            PreparedStatement statement = getConnection().prepareStatement("SELECT permissiune FROM logins WHERE userid = ? AND pass = ?");
             statement.setString(1, user);
             statement.setString(2, String.valueOf(pass));
             rs = statement.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("permissiune").charAt(0);
+                char permission = rs.getString(1).charAt(0);
+                switch (permission) {
+                    case 'A':
+                        return new AdministratorUser();
+                    case 'D':
+                        return new DirectorUser();
+                    case 'C':
+                        statement = getConnection().prepareStatement("SELECT nume,c.Id_Cadru_Didactic FROM (Select * from Loginuri_Cadre_Didactice WHERE userid = ?) l inner join Cadre_Didactice c on l.ID_Cadru_Didactic = c.Id_Cadru_Didactic");
+                        statement.setString(1, user);
+                        rs = statement.executeQuery();
+                        if (rs.next()) {
+                            String nume = rs.getString(1);
+                            int id = rs.getInt(2);
+                            return new CadruDidacticUser(id, nume);
+                        } else {
+                            return null;
+                        }
+                    default:
+                        return null;
+                }
             } else {
-                return 'R';
+                return null;
             }
         } catch (SQLException e) {
             throw new Exception(e.getMessage());

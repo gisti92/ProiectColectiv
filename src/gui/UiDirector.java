@@ -8,6 +8,7 @@ import businessLogic.Controller;
 import gui.director.ProjectManagement;
 import gui.director.programestudiu.ProgrameDeStudiu;
 import javax.swing.JFrame;
+import model.users.User;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
 
@@ -49,9 +50,8 @@ public class UiDirector extends javax.swing.JFrame {
         LoginPage.getInstance().reOpen();
     }
     
-    public void reOpen(String name) {
-        setTitle(name);
-        setName(name);
+    public void reOpen(User user) {
+        setTitle(user.getName());
         setVisible(true);
         // resetarea fereastrei
     }

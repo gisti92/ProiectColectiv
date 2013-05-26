@@ -13,6 +13,7 @@ import gui.administrator.gestionezaresurse.GestioneazaResurseLogistice;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import model.users.User;
 
 /**
  *
@@ -20,7 +21,6 @@ import javax.swing.JOptionPane;
  */
 @SuppressWarnings("serial")
 public class UiAdministrator extends javax.swing.JFrame {
-
     private static UiAdministrator instance = null;
     private AdministratorController contr = AdministratorController.getInstance();
 
@@ -53,9 +53,8 @@ public class UiAdministrator extends javax.swing.JFrame {
         LoginPage.getInstance().reOpen();
     }
 
-    public void reOpen(String name) {
-        setTitle(name);
-        setName(name);
+    public void reOpen(User user) {
+        setTitle(user.getName());
         setVisible(true);
         // resetarea fereastrei
     }

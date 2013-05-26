@@ -8,7 +8,7 @@ package persistence;
  *
  * @author S7eve
  */
-public class PubliculRepository extends RepositoryBD{
+public class PubliculRepository extends BaseRepository{
     private static  PubliculRepository instance;
     
     private PubliculRepository(){

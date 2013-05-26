@@ -34,7 +34,7 @@ import model.director.programestudiu.Semestru;
  *
  * @author Artiom.Casapu
  */
-public class DirectorRepositoryDB extends RepositoryBD {
+public class DirectorRepositoryDB extends BaseRepository {
 
     private static DirectorRepositoryDB instance;
 
