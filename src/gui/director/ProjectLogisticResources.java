@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
-import model.director.ResursaLogistica;
+import model.ResursaLogistica;
 import model.director.Task;
 
 /**
@@ -31,6 +31,7 @@ public class ProjectLogisticResources extends javax.swing.JDialog {
     public ProjectLogisticResources(JDialog parent,boolean modal,Task t) {
         super(parent,modal);
         initComponents();
+        setLocationRelativeTo(parent);
         
         this.t = t;
         

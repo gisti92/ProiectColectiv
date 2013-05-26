@@ -26,64 +26,63 @@ public class ProjectPhase extends javax.swing.JDialog {
     /**
      * Creates new form ProjectPhases
      */
-    
     private Faza faza;
     private List<Task> tasks = new ArrayList<Task>();
     private boolean ok = false;
-    
-    public ProjectPhase(JDialog parent,boolean modal,Faza f, boolean update,boolean readOnly) {
-        super(parent,modal);
+
+    public ProjectPhase(JDialog parent, boolean modal, Faza f, boolean update, boolean readOnly) {
+        super(parent, modal);
         initComponents();
-        
-        if (readOnly){
-        modificaButton.setText("Vizualizeaza");
-        denumireTextField.setEditable(false);
-        descriereTextField.setEditable(false);
-        dela.setEditable(false);
-        panala.setEditable(false);
-        adaugaButton.setVisible(false);
-        stergeButton.setVisible(false);
-        
+        setLocationRelativeTo(parent);
+
+        if (readOnly) {
+            modificaButton.setText("Vizualizeaza");
+            denumireTextField.setEditable(false);
+            descriereTextField.setEditable(false);
+            dela.setEditable(false);
+            panala.setEditable(false);
+            adaugaButton.setVisible(false);
+            btnSterge.setVisible(false);
         }
-        
+
         if (f.getTip().equals(PhaseType.PHASE)) {
             jLabel3.setText("Activitati");
         }
-        
+
         faza = f;
         tasks.addAll(faza.getTaskuri());
-        
+
         tasksTable.setModel(new TasksTableModel(tasks));
-        
+
         if (update) {
             updateComponents();
         }
     }
-    
+
     private void updateComponents() {
-         denumireTextField.setText(faza.getDenumire());
-         descriereTextField.setText(faza.getDescriere());
-         dela.setDate(faza.getInterval().getStart());
-         panala.setDate(faza.getInterval().getEnd());
+        denumireTextField.setText(faza.getDenumire());
+        descriereTextField.setText(faza.getDescriere());
+        dela.setDate(faza.getInterval().getStart());
+        panala.setDate(faza.getInterval().getEnd());
     }
-    
+
     private void updatePhase() {
-        
+
         faza.setDenumire(denumireTextField.getText());
         faza.setDescriere(descriereTextField.getText());
         TimeInterval interval = new TimeInterval();
-        interval.setStart((Date)dela.getDate());
-        interval.setEnd((Date)panala.getDate());
+        interval.setStart((Date) dela.getDate());
+        interval.setEnd((Date) panala.getDate());
         faza.setInterval(interval);
         faza.getTaskuri().clear();
         faza.getTaskuri().addAll(tasks);
-        
+
     }
 
     public boolean isOk() {
         return ok;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,13 +102,13 @@ public class ProjectPhase extends javax.swing.JDialog {
         tasksTable = new javax.swing.JTable();
         adaugaButton = new javax.swing.JButton();
         modificaButton = new javax.swing.JButton();
-        stergeButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         dela = new org.jdesktop.swingx.JXDatePicker();
         panala = new org.jdesktop.swingx.JXDatePicker();
+        btnSterge = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -146,13 +145,6 @@ public class ProjectPhase extends javax.swing.JDialog {
             }
         });
 
-        stergeButton.setText("Sterge");
-        stergeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stergeButtonActionPerformed(evt);
-            }
-        });
-
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,6 +162,13 @@ public class ProjectPhase extends javax.swing.JDialog {
         jLabel4.setText("Timp inceput:");
 
         jLabel5.setText("Timp sfirsit:");
+
+        btnSterge.setText("Sterge");
+        btnSterge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStergeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,10 +198,10 @@ public class ProjectPhase extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(modificaButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(stergeButton)
-                                .addGap(0, 137, Short.MAX_VALUE))
+                                .addComponent(btnSterge)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(descriereTextField)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -241,7 +240,7 @@ public class ProjectPhase extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(adaugaButton)
                     .addComponent(modificaButton)
-                    .addComponent(stergeButton))
+                    .addComponent(btnSterge))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -263,7 +262,7 @@ public class ProjectPhase extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void adaugaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaButtonActionPerformed
-        
+
         Task t = new Task();
         if (faza.getTip().equals(Faza.PhaseType.ADMINISTRATIVE_ACTIVITY)) {
             t.setTip(Task.TaskType.ADMINISTRATIVE_TASK);
@@ -271,9 +270,9 @@ public class ProjectPhase extends javax.swing.JDialog {
             t.setTip(Task.TaskType.SCIENTIFIC_ACTIVITY);
         }
         try {
-            ProjectTask taskDialog = new ProjectTask(this,true,t, false);
+            ProjectTask taskDialog = new ProjectTask(this, true, t, false);
             taskDialog.setVisible(true);
-            
+
             if (taskDialog.isOk()) {
                 tasks.add(t);
                 tasksTable.setModel(new TasksTableModel(tasks));
@@ -281,41 +280,40 @@ public class ProjectPhase extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(ProjectPhase.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-        
+
+
     }//GEN-LAST:event_adaugaButtonActionPerformed
 
     private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
-        
+
         int row = tasksTable.getSelectedRow();
-        Task t = ((TasksTableModel)tasksTable.getModel()).getTask(row);
-        
-         try {
-            ProjectTask taskDialog = new ProjectTask(this,true,t, true);
+        Task t = ((TasksTableModel) tasksTable.getModel()).getTask(row);
+
+        try {
+            ProjectTask taskDialog = new ProjectTask(this, true, t, true);
             taskDialog.setVisible(true);
-            
+
             if (taskDialog.isOk()) {
                 tasksTable.setModel(new TasksTableModel(tasks));
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ProjectPhase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_modificaButtonActionPerformed
 
-    private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
-        
+    private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
         int row = tasksTable.getSelectedRow();
-        Task t = ((TasksTableModel)tasksTable.getModel()).getTask(row);
-        
-        tasks.remove(t);
-        
-        tasksTable.setModel(new TasksTableModel(tasks));      
-    }//GEN-LAST:event_stergeButtonActionPerformed
+        Task t = ((TasksTableModel) tasksTable.getModel()).getTask(row);
 
+        tasks.remove(t);
+
+        tasksTable.setModel(new TasksTableModel(tasks));
+    }//GEN-LAST:event_btnStergeActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaButton;
+    private javax.swing.JButton btnSterge;
     private javax.swing.JButton cancelButton;
     private org.jdesktop.swingx.JXDatePicker dela;
     private javax.swing.JTextField denumireTextField;
@@ -330,7 +328,6 @@ public class ProjectPhase extends javax.swing.JDialog {
     private javax.swing.JButton modificaButton;
     private javax.swing.JButton okButton;
     private org.jdesktop.swingx.JXDatePicker panala;
-    private javax.swing.JButton stergeButton;
     private javax.swing.JTable tasksTable;
     // End of variables declaration//GEN-END:variables
 }

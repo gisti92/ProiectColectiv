@@ -188,7 +188,7 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void startLogin() {
         try {
-            if (contr.authentication(txtUser.getText(), txtPassword.getPassword())) {
+            if (contr.login(txtUser.getText(), txtPassword.getPassword())) {
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "Autentificare esuata, introduceti din nou datele de intrare! ", "Eroare la logare", JOptionPane.ERROR_MESSAGE);

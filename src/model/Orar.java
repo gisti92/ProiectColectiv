@@ -9,7 +9,7 @@ package model;
  * @author Deea
  */
 public class Orar {
-    private String ziua; 
+    private int ziua; 
     private int ora_inceput; 
     private int ora_sfarsit; 
     private int frecventa; 
@@ -20,7 +20,7 @@ public class Orar {
     private int Id_Sala; 
     private int Id_Formatie;
 
-    public Orar(String ziua, int ora_inceput, int ora_sfarsit, int frecventa, int Id_Disciplina,String tip, int Id_Cadru_Didactic, int Id_Sala, int Id_Formatie) {
+    public Orar(int ziua, int ora_inceput, int ora_sfarsit, int frecventa, int Id_Disciplina,String tip, int Id_Cadru_Didactic, int Id_Sala, int Id_Formatie) {
         this.ziua = ziua;
         this.ora_inceput = ora_inceput;
         this.ora_sfarsit = ora_sfarsit;
@@ -32,11 +32,11 @@ public class Orar {
         this.Id_Formatie = Id_Formatie;
     }
 
-    public String getZiua() {
+    public int getZiua() {
         return ziua;
     }
 
-    public void setZiua(String ziua) {
+    public void setZiua(int ziua) {
         this.ziua = ziua;
     }
 

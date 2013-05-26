@@ -2,21 +2,29 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.publicul.activitaticd.models;
+package gui.sharedmodels;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import model.Formatie;
+import model.Sala;
 
 /**
  *
  * @author Deea
  */
-public class FormatiiTM extends AbstractTableModel {
+public class SaliTM extends AbstractTableModel {
 
-    private String[] header = {" Id Formatie ", "Denumire formatie", "Id Sectie", "An ", " Grupa"};
-    private List<Formatie> list = new ArrayList<Formatie>();
+    private String[] header = {"Id sala", "Denumire sala", "Capacitate"};
+    private List<Sala> list = new ArrayList<Sala>();
+
+    public SaliTM(List<Sala> list) {
+        this.list = list;
+        fireTableDataChanged();
+    }
+
+    public SaliTM() {
+    }
 
     @Override
     public int getRowCount() {
@@ -28,32 +36,20 @@ public class FormatiiTM extends AbstractTableModel {
         return header.length;
     }
 
-    public int getIdByRow(int rowIndex) {
-        if (rowIndex < 0 || rowIndex >= list.size()) {
-            return -1;
-        } else {
-            return list.get(rowIndex).getId_Formatie();
-        }
-    }
-
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return list.get(rowIndex).getId_Formatie();
+                return list.get(rowIndex).getId();
             case 1:
                 return list.get(rowIndex).getDenumire();
             case 2:
-                return list.get(rowIndex).getId_Sectie();
-            case 3:
-                return list.get(rowIndex).getAn();
-            case 4:
-                return list.get(rowIndex).getGrupa();
+                return list.get(rowIndex).getCapacitate();
             default:
                 return null;
         }
     }
-    
+
     public String[] getHeader() {
         return header;
     }
@@ -68,12 +64,12 @@ public class FormatiiTM extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void addRow(Formatie row) {
+    public void addRow(Sala row) {
         list.add(row);
         fireTableDataChanged();
     }
 
-    public void setList(List<Formatie> list) {
+    public void setList(List<Sala> list) {
         this.list = list;
         fireTableDataChanged();
     }

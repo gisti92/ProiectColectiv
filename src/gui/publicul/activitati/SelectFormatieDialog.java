@@ -2,47 +2,59 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.publicul.activitaticd;
+package gui.publicul.activitati;
 
 import businessLogic.Controller;
-import gui.publicul.informatiiresurse.models.ResurseUmaneTM;
+import businessLogic.PubliculController;
+import gui.publicul.activitati.models.FormatiiTM;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import model.Cadru_Didactic;
+import javax.swing.JOptionPane;
+import model.Formatie;
 
 /**
  *
- * @author S7eve
+ * @author Deea
  */
-public class SelectCadruDidacticDialog extends javax.swing.JDialog {
-    
-    private Controller contr = Controller.getInstance();
-    private ResurseUmaneTM tm;
+public class SelectFormatieDialog extends javax.swing.JDialog {
+
+    private PubliculController contr = PubliculController.getInstance();
     private boolean selected = false;
+    private FormatiiTM tableModel;
+
     /**
-     * Creates new form SelectCadruDidacticDialog
+     * Creates new form SelectFormatieDialog
      */
-    public SelectCadruDidacticDialog(JDialog parent, boolean modal) {
+    public SelectFormatieDialog(JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        contr.refreshResurseUmaneTM();
-        tm = (ResurseUmaneTM) contr.getResurseUmaneTM();
-        tableCD.setModel(tm);
         setLocationRelativeTo(parent);
+        List<Formatie> list;
+        try {
+            list = contr.getFormatii();
+            tableModel =new FormatiiTM(list);
+            tableFormatie.setModel(tableModel);
+        } catch (Exception ex) {
+            Logger.getLogger(SelectFormatieDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Eroare la incarcarea Formatiilor", "Eroare", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
     }
 
-    public int getSelectedCDId(){
-        if (!selected){
+    public int getSelectedFormatieId() {
+        if (!selected) {
             return -1;
         }
-        int index = tableCD.getSelectedRow();
-        if (index < 0 ){
+        int index = tableFormatie.getSelectedRow();
+        if (index < 0) {
             return -1;
         }
-        int cdId  = tm.getIdByRow(index);
-        return cdId;
+        int idFormatie = tableModel.getIdByRow(index);
+        return idFormatie;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,14 +65,14 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableCD = new javax.swing.JTable();
+        tableFormatie = new javax.swing.JTable();
         btnSelected = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Filtrare dupa id_cadru_didactic");
+        setTitle("Filtrare dupa id_formatie");
 
-        tableCD.setModel(new javax.swing.table.DefaultTableModel(
+        tableFormatie.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -71,7 +83,7 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tableCD);
+        jScrollPane1.setViewportView(tableFormatie);
 
         btnSelected.setText("Select");
         btnSelected.addActionListener(new java.awt.event.ActionListener() {
@@ -81,35 +93,32 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
         });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel1.setText("Selectati cadrul didactic dupa care doriti sa se efectueze filtrarea:");
+        jLabel1.setText("Selectati formatia dupa care doriti sa se efectueze filtrarea:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(202, 202, 202)
-                                .addComponent(btnSelected))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(46, 46, 46)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(95, 95, 95))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSelected)
+                .addGap(221, 221, 221))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSelected)
                 .addContainerGap())
@@ -119,17 +128,14 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectedActionPerformed
-        selected=true;
+        // TODO add your handling code here:
+        selected = true;
         dispose();
     }//GEN-LAST:event_btnSelectedActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSelected;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableCD;
+    private javax.swing.JTable tableFormatie;
     // End of variables declaration//GEN-END:variables
 }

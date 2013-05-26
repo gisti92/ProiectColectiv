@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.publicul.activitaticd.models;
+package gui.publicul.activitati.models;
 
 import java.util.ArrayList;
 import java.util.List;

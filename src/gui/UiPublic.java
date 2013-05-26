@@ -5,8 +5,10 @@
 package gui;
 
 import gui.publicul.informatiiresurse.InformatiResurse;
-import gui.publicul.activitaticd.CalendarulActivitatiilorDidactice;
 import businessLogic.Controller;
+import businessLogic.PubliculController;
+import gui.publicul.activitati.CalendarulActivitatiilor;
+import gui.publicul.proiecte.InformatiiProiecteDepartament;
 import javax.swing.JFrame;
 
 /**
@@ -16,14 +18,14 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class UiPublic extends javax.swing.JFrame {
 
-    private static UiPublic instance = null;
-    private Controller contr = null;
+    private static UiPublic instance;
+    private PubliculController contr;
 
     /**
      * Creates new form UiPublic
      */
     private UiPublic() {
-        contr = Controller.getInstance();
+        contr = PubliculController.getInstance();
         initComponents();
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -52,7 +54,6 @@ public class UiPublic extends javax.swing.JFrame {
         setTitle(name);
         setName(name);
         setVisible(true);
-        // resetarea fereastrei
     }
 
     /**
@@ -89,6 +90,11 @@ public class UiPublic extends javax.swing.JFrame {
         });
 
         btnProiecte.setText("Informatii despre proiectele departamentului");
+        btnProiecte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProiecteActionPerformed(evt);
+            }
+        });
 
         btnCalendar.setText("Calendarul activitatiilor");
         btnCalendar.addActionListener(new java.awt.event.ActionListener() {
@@ -148,11 +154,17 @@ public class UiPublic extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInfoResurseActionPerformed
 
     private void btnCalendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalendarActionPerformed
-        // TODO add your handling code here:
         setVisible(false);
-        new CalendarulActivitatiilorDidactice(this, true).setVisible(true);
+        new CalendarulActivitatiilor(this, true).setVisible(true);
         setVisible(true);
     }//GEN-LAST:event_btnCalendarActionPerformed
+
+    private void btnProiecteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProiecteActionPerformed
+        setVisible(false);
+        new InformatiiProiecteDepartament(this, true).setVisible(true);
+        setVisible(true);
+    }//GEN-LAST:event_btnProiecteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalendar;
     private javax.swing.JButton btnInfoResurse;

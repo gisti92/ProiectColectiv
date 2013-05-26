@@ -211,8 +211,14 @@
       </Events>
     </Component>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="dela">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="panala">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="panalaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.director;
+package model;
 
 /**
  *
@@ -11,12 +11,24 @@ package model.director;
 public class CadruDidactic {
     
     private int id;
-    private String positia;
+    private String pozitia;
     private String denumirePost;
     private String nume;
     private String functia;
     private String titVac;
 
+    public CadruDidactic(int id, String pozitia, String denumirePost, String nume, String functia, String titVac) {
+        this.id = id;
+        this.pozitia = pozitia;
+        this.denumirePost = denumirePost;
+        this.nume = nume;
+        this.functia = functia;
+        this.titVac = titVac;
+    }
+
+    public CadruDidactic() {
+    }
+    
     /**
      * @return the id
      */
@@ -32,18 +44,17 @@ public class CadruDidactic {
     }
 
     /**
-     * @return the positia
+     * @return the pozitia
      */
-    public String getPositia() {
-        setPositia(positia);
-        return positia;
+    public String getPozitia() {
+        return pozitia;
     }
 
     /**
-     * @param positia the positia to set
+     * @param positia the pozitia to set
      */
-    public void setPositia(String positia) {
-        this.positia = positia;
+    public void setPozitia(String pozitia) {
+        this.pozitia = pozitia;
     }
 
     /**

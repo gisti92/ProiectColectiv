@@ -4,10 +4,12 @@
  */
 package gui;
 
-import gui.administrator.gestionezaru.GestioneazaResurseUmaneDialog;
+import businessLogic.AdministratorController;
+import gui.administrator.gestionezaresurse.GestioneazaResurseUmane;
 import javax.swing.JFrame;
 
 import businessLogic.Controller;
+import gui.administrator.gestionezaresurse.GestioneazaResurseLogistice;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -20,13 +22,12 @@ import javax.swing.JOptionPane;
 public class UiAdministrator extends javax.swing.JFrame {
 
     private static UiAdministrator instance = null;
-    private Controller contr = null;
+    private AdministratorController contr = AdministratorController.getInstance();
 
     /**
      * Creates new form UiPublic
      */
     private UiAdministrator() {
-        contr = Controller.getInstance();
         initComponents();
         setLocationRelativeTo(null);
 
@@ -206,7 +207,7 @@ public class UiAdministrator extends javax.swing.JFrame {
 
     private void btnInregResUmaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResUmaneActionPerformed
         setVisible(false);
-        new GestioneazaResurseUmaneDialog(this,true).setVisible(true);
+        new GestioneazaResurseUmane(this,true).setVisible(true);
         setVisible(true);
     }//GEN-LAST:event_btnInregResUmaneActionPerformed
 
@@ -215,7 +216,9 @@ public class UiAdministrator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInregResFinanciareActionPerformed
 
     private void btnInregResLogisticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResLogisticeActionPerformed
-        showNotYetSupportedDialog();
+        setVisible(false);
+        new GestioneazaResurseLogistice(this,true).setVisible(true);
+        setVisible(true);
     }//GEN-LAST:event_btnInregResLogisticeActionPerformed
 
     private void showNotYetSupportedDialog() {

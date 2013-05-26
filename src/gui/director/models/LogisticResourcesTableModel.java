@@ -6,8 +6,8 @@ package gui.director.models;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import model.director.Echipament;
-import model.director.ResursaLogistica;
+import model.Echipament;
+import model.ResursaLogistica;
 
 /**
  *

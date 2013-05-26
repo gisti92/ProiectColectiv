@@ -4,6 +4,8 @@
  */
 package model.director;
 
+import model.ResursaLogistica;
+import model.CadruDidactic;
 import java.util.ArrayList;
 import java.util.List;
 

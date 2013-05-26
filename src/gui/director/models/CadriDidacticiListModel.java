@@ -6,7 +6,7 @@ package gui.director.models;
 
 import java.util.List;
 import javax.swing.AbstractListModel;
-import model.director.CadruDidactic;
+import model.CadruDidactic;
 
 /**
  *

@@ -12,16 +12,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import model.director.CadruDidactic;
-import model.director.Echipament;
+import model.CadruDidactic;
+import model.Echipament;
 import model.director.Faza;
 import model.director.Faza.PhaseType;
 import model.director.Proiect;
 import static model.director.Proiect.ProjectStatus.APROBAT;
 import model.director.Proiect.ProjectType;
 import model.director.ResursaFinanciara;
-import model.director.ResursaLogistica;
-import model.director.Sala;
+import model.ResursaLogistica;
+import model.Sala;
 import model.director.Task;
 import model.director.Task.TaskType;
 import model.director.TimeInterval;
@@ -212,7 +212,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
             cd.setId(res.getInt("Id_Cadru_Didactic"));
             cd.setDenumirePost(res.getString("den_post"));
             cd.setNume(res.getString("nume"));
-            cd.setPositia(res.getString("pozitia"));
+            cd.setPozitia(res.getString("pozitia"));
             cd.setTitVac(res.getString("tit_vac"));
             cd.setFunctia(res.getString("functia"));
 
@@ -237,7 +237,7 @@ public class DirectorRepositoryDB extends RepositoryBD {
             cd.setId(res.getInt("Id_Cadru_Didactic"));
             cd.setDenumirePost(res.getString("den_post"));
             cd.setNume(res.getString("nume"));
-            cd.setPositia(res.getString("pozitia"));
+            cd.setPozitia(res.getString("pozitia"));
             cd.setTitVac(res.getString("tit_vac"));
             cd.setFunctia(res.getString("functia"));
 

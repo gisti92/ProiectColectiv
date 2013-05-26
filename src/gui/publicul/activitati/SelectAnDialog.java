@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.publicul.activitaticd;
+package gui.publicul.activitati;
 
-import businessLogic.Controller;
+import businessLogic.PubliculController;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -16,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class SelectAnDialog extends javax.swing.JDialog {
 
-    private Controller contr = Controller.getInstance();
+    private PubliculController contr = PubliculController.getInstance();
     private boolean selected = false;
 
     /**
@@ -24,11 +26,9 @@ public class SelectAnDialog extends javax.swing.JDialog {
      */
     public SelectAnDialog(JDialog parent, boolean modal) {
         super(parent, modal);
-        initComponents();   
+        initComponents();
         setLocationRelativeTo(parent);
         try {
-            contr.refreshCalendarActivitati(null);
-            //tabel.setModel(contr.getCalendarActivitatiTM());
             List<String> list = contr.getAvailableYears();
             String[] array = new String[list.size()];
             list.toArray(array);
@@ -36,7 +36,9 @@ public class SelectAnDialog extends javax.swing.JDialog {
             model = new DefaultComboBoxModel(array);
             cb.setModel(model);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex, "Eroare in Calendarul Activitatiilor", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(SelectAnDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Eroare la incarcarea anilor disponibile","eroare" , JOptionPane.ERROR_MESSAGE);
+            dispose();
         }
     }
 

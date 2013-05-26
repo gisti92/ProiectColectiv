@@ -23,9 +23,9 @@ public class FinancialResourceDialog extends javax.swing.JDialog {
     public FinancialResourceDialog(JDialog parent, boolean modal , ResursaFinanciara f, boolean update) {
         super(parent,modal);
         initComponents();
+        setLocationRelativeTo(parent);
         
         resursa = f;
-        
         sumaComboBox.setModel(new DefaultComboBoxModel(new ResursaFinanciara.TipCheltuiala[] { 
             TipCheltuiala.CHELTUIALA_CU_MANOPERA,
             TipCheltuiala.CHELTUIALA_DE_LOGISTICA,

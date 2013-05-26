@@ -2,22 +2,30 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.publicul.informatiiresurse.models;
+package gui.sharedmodels;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import model.Cadru_Didactic;
+import model.CadruDidactic;
 
 /**
  *
  * @author Deea
  */
-public class ResurseUmaneTM extends AbstractTableModel {
+public class CadreDidacticeTM extends AbstractTableModel {
 
     private String[] header = {"Pozitia", "Denumire post", "Nume", "Functie", "Titular/Vacant"};
-    private List<Cadru_Didactic> list = new ArrayList<Cadru_Didactic>();
+    private List<CadruDidactic> list = new ArrayList<CadruDidactic>();
 
+    public CadreDidacticeTM(List<CadruDidactic> list){
+        this.list=list;
+        fireTableDataChanged();
+    }
+    
+    public CadreDidacticeTM(){
+    }
+    
     @Override
     public int getRowCount() {
         return list.size();
@@ -32,7 +40,7 @@ public class ResurseUmaneTM extends AbstractTableModel {
         if (rowIndex < 0 || rowIndex >= list.size()) {
             return -1;
         } else {
-            return list.get(rowIndex).getId_Cadru_Didactic();
+            return list.get(rowIndex).getId();
         }
     }
 
@@ -42,13 +50,13 @@ public class ResurseUmaneTM extends AbstractTableModel {
             case 0:
                 return list.get(rowIndex).getPozitia();
             case 1:
-                return list.get(rowIndex).getDen_post();
+                return list.get(rowIndex).getDenumirePost();
             case 2:
                 return list.get(rowIndex).getNume();
             case 3:
                 return list.get(rowIndex).getFunctia();
             case 4:
-                return list.get(rowIndex).getTit_vac().equals("T")?"Titular":"Vacant" ;
+                return list.get(rowIndex).getTitVac().equals("T")?"Titular":"Vacant" ;
             default:
                 return null;
         }
@@ -68,12 +76,12 @@ public class ResurseUmaneTM extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void addRow(Cadru_Didactic row) {
+    public void addRow(CadruDidactic row) {
         list.add(row);
         fireTableDataChanged();
     }
 
-    public void setList(List<Cadru_Didactic> list) {
+    public void setList(List<CadruDidactic> list) {
         this.list = list;
         fireTableDataChanged();
     }

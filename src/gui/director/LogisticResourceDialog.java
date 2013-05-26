@@ -4,16 +4,16 @@
  */
 package gui.director;
 
-import gui.director.models.EchipamenteTableModel;
-import gui.director.models.SaliTableModel;
+import gui.sharedmodels.EchipamenteTM;
+import gui.sharedmodels.SaliTM;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
-import model.director.Echipament;
-import model.director.ResursaLogistica;
-import model.director.Sala;
+import model.Echipament;
+import model.ResursaLogistica;
+import model.Sala;
 import persistence.DirectorRepositoryDB;
 
 /**
@@ -28,8 +28,8 @@ public class LogisticResourceDialog extends javax.swing.JDialog {
     private final static String SALA = "Sala";
     private final static String ECHIPAMENT = "Echipament";
     
-    private List<ResursaLogistica> sali = new ArrayList<ResursaLogistica>();
-    private List<ResursaLogistica> echipamente = new ArrayList<ResursaLogistica>();
+    private List<Sala> sali = new ArrayList<Sala>();
+    private List<Echipament> echipamente = new ArrayList<Echipament>();
     
     /**
      * Creates new form LogisticResourceDialog
@@ -37,7 +37,7 @@ public class LogisticResourceDialog extends javax.swing.JDialog {
     public LogisticResourceDialog(JDialog parent,boolean modal) throws SQLException {
         super(parent, modal);
         initComponents();
-        
+        setLocationRelativeTo(parent);
         tipResursaComboBox.setModel(new DefaultComboBoxModel(new String[] {  
             SALA,
             ECHIPAMENT
@@ -49,14 +49,14 @@ public class LogisticResourceDialog extends javax.swing.JDialog {
         
         for (ResursaLogistica res : resurse) {
             if (res instanceof Sala) {
-                sali.add(res);
+                sali.add((Sala)res);
             }
             if (res instanceof Echipament) {
-                echipamente.add(res);
+                echipamente.add((Echipament)res);
             }
         }
         
-        logisticResourcesTable.setModel(new SaliTableModel(sali));
+        logisticResourcesTable.setModel(new SaliTM(sali));
     }
 
     public ResursaLogistica getSelected() {
@@ -188,9 +188,9 @@ public class LogisticResourceDialog extends javax.swing.JDialog {
     private void tipResursaComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tipResursaComboBoxItemStateChanged
         
         if (tipResursaComboBox.getSelectedIndex() == 0) {
-            logisticResourcesTable.setModel(new SaliTableModel(sali));
+            logisticResourcesTable.setModel(new SaliTM(sali));
         } else {
-            logisticResourcesTable.setModel(new EchipamenteTableModel(echipamente));
+            logisticResourcesTable.setModel(new EchipamenteTM(echipamente));
         }
         
     }//GEN-LAST:event_tipResursaComboBoxItemStateChanged

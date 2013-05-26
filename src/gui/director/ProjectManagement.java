@@ -8,6 +8,7 @@ import gui.director.models.ProjectsTableModel;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
 import persistence.DirectorRepositoryDB;
@@ -18,8 +19,8 @@ import persistence.DirectorRepositoryDB;
  */
 public class ProjectManagement extends javax.swing.JFrame {
 
-    
     private ProjectType projectType;
+
     /**
      * Creates new form ProjectManagement
      */
@@ -27,15 +28,16 @@ public class ProjectManagement extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.projectType = projectType;
-        
+
         setTitle(projectType.toString());
         titleLabel.setText(projectType.toString());
         try {
-            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType,false)));//TODO  replace last true with value got from constructor
+            refreshProjectsList(projectType);
         } catch (SQLException ex) {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Eroare la incarcarea proiectelor", "Eroare", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
 
     /**
@@ -156,79 +158,82 @@ public class ProjectManagement extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
-        
+
         Proiect p = new Proiect();
         p.setTip(projectType);
-        
-        ProjectForm frm = new ProjectForm(this,true,p, false);
-        frm.setModal(true);
+
+        ProjectForm frm = new ProjectForm(this, true, p, false);
         frm.setVisible(true);
-        
-        
+
         if (frm.isOk()) {
             try {
                 p.setStatus(Proiect.ProjectStatus.APROBAT);
                 DirectorRepositoryDB.getInstance().addProject(p);
+                refreshProjectsList(projectType);
             } catch (SQLException ex) {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType,false)));//TODO  replace last true with value got from constructor
-            } catch (SQLException ex) {
-                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Eroare la salvarea proiectului", "Eroare", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
     }//GEN-LAST:event_insertButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-      
+        if (!isSelected()) {
+
+            JOptionPane.showMessageDialog(this, "Mai intai selectati un proiect", "Alert", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         int row = projectsTable.getSelectedRow();
         Proiect p = ((ProjectsTableModel) projectsTable.getModel()).getProject(row);
-        
-        ProjectForm frm = new ProjectForm(this,true,p, true); 
+
+        ProjectForm frm = new ProjectForm(this, true, p, true);
         frm.setModal(true);
         frm.setVisible(true);
-        
+
         if (frm.isOk()) {
             try {
                 DirectorRepositoryDB.getInstance().updateProject(p);
+                refreshProjectsList(projectType);
             } catch (SQLException ex) {
                 Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType,false)));//TODO  replace last true with value got from constructor
-            } catch (SQLException ex) {
-                Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Eroare la modificarea proiectului", "Eroare", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
     }//GEN-LAST:event_updateButtonActionPerformed
+
+    private boolean isSelected() {
+        if (projectsTable.getSelectedRow() > -1) {
+            return true;
+        }
+        return false;
+    }
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        
+        if (!isSelected()) {
+            JOptionPane.showMessageDialog(this, "Mai intai selectati un proiect", "Alert", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         int row = projectsTable.getSelectedRow();
         Proiect p = ((ProjectsTableModel) projectsTable.getModel()).getProject(row);
-        
+
         //TODO: are you sure dialog
-        
+
         try {
             DirectorRepositoryDB.getInstance().deleteProject(p);
+            refreshProjectsList(projectType);//TODO  replace last true with value got from constructor
         } catch (SQLException ex) {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Eroare la stergerea proiectului", "Eroare", JOptionPane.ERROR_MESSAGE);
         }
-        try {
-            projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType,false)));//TODO  replace last true with value got from constructor
-        } catch (SQLException ex) {
-            Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }//GEN-LAST:event_deleteButtonActionPerformed
 
+    }//GEN-LAST:event_deleteButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton insertButton;
@@ -240,4 +245,8 @@ public class ProjectManagement extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+
+    private void refreshProjectsList(ProjectType projectType) throws SQLException {
+        projectsTable.setModel(new ProjectsTableModel(DirectorRepositoryDB.getInstance().getProjects(projectType, false)));//TODO  replace last true with value got from constructor
+    }
 }

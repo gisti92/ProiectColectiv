@@ -2,14 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.director;
+package model;
 
 /**
  *
  * @author Artiom.Casapu
  */
 public class Sala extends ResursaLogistica {
+    private int capacitate;
 
+    public Sala(int Id_Sala, String denumire, int capacitate) {
+        super(Id_Sala,denumire);
+        this.capacitate=capacitate;
+    }
+
+    public Sala(){
+    }
+    
     public int getCapacitate() {
         return capacitate;
     }
@@ -22,7 +31,4 @@ public class Sala extends ResursaLogistica {
     public String toString() {
         return getDenumire() + " (capacitate - " + getCapacitate() + ")"; 
     }
-    
-    private int capacitate;
-    
 }

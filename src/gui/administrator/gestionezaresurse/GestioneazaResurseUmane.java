@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.administrator.gestionezaru;
+package gui.administrator.gestionezaresurse;
 
-import businessLogic.Controller;
-import gui.publicul.informatiiresurse.models.ResurseUmaneTM;
+import businessLogic.AdministratorController;
+import gui.sharedmodels.CadreDidacticeTM;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -16,24 +18,29 @@ import javax.swing.table.TableModel;
  *
  * @author S7eve
  */
-public class GestioneazaResurseUmaneDialog extends javax.swing.JDialog {
+public class GestioneazaResurseUmane extends javax.swing.JDialog {
 
-    private Controller contr = Controller.getInstance();
-
+    private AdministratorController contr = AdministratorController.getInstance();
+    private CadreDidacticeTM resurseUmaneTM = new CadreDidacticeTM();
     /**
      * Creates new form GestioneazaResurseUmaneDialog
      */
-    public GestioneazaResurseUmaneDialog(java.awt.Frame parent, boolean modal) {
+    public GestioneazaResurseUmane(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tabelCadreDidactice.setModel(resurseUmaneTM);
         setLocationRelativeTo(null);
-        buildMyComponents();
+        refreshResurseUmaneTable();
         bindEvents();
     }
 
-    private void buildMyComponents() {
-        contr.refreshResurseUmaneTM();
-        tabelCadreDidactice.setModel(contr.getResurseUmaneTM());
+    private void refreshResurseUmaneTable() {
+        try {
+            resurseUmaneTM.setList(contr.getResurseUmane());
+        } catch (Exception ex) {
+            Logger.getLogger(GestioneazaResurseUmane.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,"Eroare la incarcare lista de carde didactice!","Eroare",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void bindEvents() {
@@ -227,11 +234,11 @@ public class GestioneazaResurseUmaneDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Completati toate fieldurile! ", "Eroare ", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        ResurseUmaneTM model = (ResurseUmaneTM) tabelCadreDidactice.getModel();
+        CadreDidacticeTM model = (CadreDidacticeTM) tabelCadreDidactice.getModel();
         int row = tabelCadreDidactice.getSelectedRow();
         final String tit_vac = ((String) cbTitular.getSelectedItem()).substring(0, 1);
         contr.modificaCadruDidactic(model.getIdByRow(row), txtPozitia.getText(), txtDenumirePost.getText(), txtNume.getText(), txtFunctia.getText(), tit_vac);
-        contr.refreshResurseUmaneTM();
+        refreshResurseUmaneTable();
     }//GEN-LAST:event_btnModificaActionPerformed
     public String getBlabla(){
         return txtDenumirePost.getText();
@@ -243,11 +250,11 @@ public class GestioneazaResurseUmaneDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Completati toate fieldurile! ", "Eroare ", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        ResurseUmaneTM model = (ResurseUmaneTM) tabelCadreDidactice.getModel();
+        CadreDidacticeTM model = (CadreDidacticeTM) tabelCadreDidactice.getModel();
         int row = tabelCadreDidactice.getSelectedRow();
         String tit_vac = ((String) cbTitular.getSelectedItem()).substring(0, 1);
         contr.adaugaCadruDidactic(model.getIdByRow(row), txtPozitia.getText(), txtDenumirePost.getText(), txtNume.getText(), txtFunctia.getText(), tit_vac);
-        contr.refreshResurseUmaneTM();
+        refreshResurseUmaneTable();
     }//GEN-LAST:event_btnAdaugaActionPerformed
 
     private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
@@ -255,10 +262,10 @@ public class GestioneazaResurseUmaneDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Selectati o linie! ", "Eroare ", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        ResurseUmaneTM model = (ResurseUmaneTM) tabelCadreDidactice.getModel();
+        CadreDidacticeTM model = (CadreDidacticeTM) tabelCadreDidactice.getModel();
         int row = tabelCadreDidactice.getSelectedRow();
         contr.stergeCadruDidactic(model.getIdByRow(row));
-        contr.refreshResurseUmaneTM();
+        refreshResurseUmaneTable();
     }//GEN-LAST:event_btnStergeActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdauga;

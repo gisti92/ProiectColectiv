@@ -8,59 +8,62 @@ import gui.director.models.PhasesTableModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import model.director.Faza;
 import model.director.Proiect;
 import model.director.Proiect.ProjectType;
 import model.director.TimeInterval;
+import validation.Validator;
 
 /**
  *
  * @author Artiom.Casapu
  */
 public class ProjectForm extends javax.swing.JDialog {
+
     private Proiect prj;
     private boolean ok = false;
     private List<Faza> phases = new ArrayList<Faza>();
+
     /**
      * Creates new form ProjectForm
      */
-    public ProjectForm(JFrame parent,boolean modal,Proiect prj , boolean update) {
-        super(parent,modal);
+    public ProjectForm(JFrame parent, boolean modal, Proiect prj, boolean update) {
+        super(parent, modal);
         initComponents();
-        
+        setLocationRelativeTo(parent);
         this.prj = prj;
-        
+
         phases.addAll(this.prj.getFaze());
-        
+
         if (prj.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV)) {
             jLabel5.setText("Activitati");
         }
-        
+
         if (prj.getTip().equals(ProjectType.PROIECT_STIINTIFIC)) {
             jLabel5.setText("Faze");
         }
-        
+
         phasesTable.setModel(new PhasesTableModel(phases));
-        
+
         if (update) {
-            
+
             denumireTextField.setText(prj.getDenumire());
             descriptionEdit.setText(prj.getDescriere());
             dela.setDate(prj.getInterval().getStart());
             panala.setDate(prj.getInterval().getEnd());
-            
+
         }
-        
+
     }
-    
+
     private void updateProject() {
         prj.setDenumire(denumireTextField.getText());
         prj.setDescriere(descriptionEdit.getText());
         TimeInterval interval = new TimeInterval();
-        interval.setStart((Date)dela.getDate());
-        interval.setEnd((Date)panala.getDate());
+        interval.setStart((Date) dela.getDate());
+        interval.setEnd((Date) panala.getDate());
         prj.setInterval(interval);
         prj.getFaze().clear();
         prj.getFaze().addAll(phases);
@@ -155,6 +158,18 @@ public class ProjectForm extends javax.swing.JDialog {
             }
         });
 
+        dela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delaActionPerformed(evt);
+            }
+        });
+
+        panala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                panalaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -231,69 +246,103 @@ public class ProjectForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        
+        if (!allFieldsCompleted()) {
+            JOptionPane.showMessageDialog(this, "Inainte de a salva trebuie sa completati toate campurile", "Atentie", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (phases.size() == 0 ){
+            JOptionPane.showMessageDialog(this, "Inainte de a salva trebuie sa difiniti cel putin o "+getChildName(), "Atentie", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         ok = true;
         updateProject();
-        
+
         dispose();
-        
+
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        
+
         //TODO: warning
         dispose();
-        
+
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
-        
+
+        if (!isSelected()) {
+            JOptionPane.showMessageDialog(this, "Mai intai selectati o " + getChildName(), "Atentie", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         int row = phasesTable.getSelectedRow();
         Faza f = ((PhasesTableModel) phasesTable.getModel()).getFaza(row);
-        
-        ProjectPhase phase = new ProjectPhase(this,true,f, true,true); //TODO replace last true 
+
+        ProjectPhase phase = new ProjectPhase(this, true, f, true, true); //TODO replace last true 
         phase.setModal(true);
         phase.setVisible(true);
-        
+
         phasesTable.setModel(new PhasesTableModel(phases));
-        
+
     }//GEN-LAST:event_modificaButtonActionPerformed
 
     private void adaugaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adaugaButtonActionPerformed
-        
+        if (!allFieldsCompleted()) {
+            JOptionPane.showMessageDialog(this, "Inainte de a adauga o "+getChildName()+" trebuie sa completati toate campurile", "Atentie", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         Faza f = new Faza();
-        
+
         if (prj.getTip().equals(ProjectType.EVENIMENT_ADMINISTRATIV)) {
             f.setTip(Faza.PhaseType.ADMINISTRATIVE_ACTIVITY);
         } else {
             f.setTip(Faza.PhaseType.PHASE);
         }
-        
-        ProjectPhase phase = new ProjectPhase(this,true,f, false,false); //TODO replace last true 
+
+        ProjectPhase phase = new ProjectPhase(this, true, f, false, false); //TODO replace last true 
         phase.setModal(true);
         phase.setVisible(true);
-        
+
         if (phase.isOk()) {
             phases.add(f);
             phasesTable.setModel(new PhasesTableModel(phases));
         }
-        
+
     }//GEN-LAST:event_adaugaButtonActionPerformed
 
     private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
-        
+        if (!isSelected()) {
+            JOptionPane.showMessageDialog(this, "Mai intai selectati o " + getChildName(), "Atentie", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         int row = phasesTable.getSelectedRow();
         Faza f = ((PhasesTableModel) phasesTable.getModel()).getFaza(row);
-        
+
         phases.remove(f);
         phasesTable.setModel(new PhasesTableModel(phases));
-        
+
     }//GEN-LAST:event_stergeButtonActionPerformed
+
+    private void delaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delaActionPerformed
+        if (!Validator.areDatesValid(dela.getDate(), panala.getDate())) {
+            dela.setDate(null);
+            JOptionPane.showMessageDialog(this, "Data de inceput trebuie sa fie strict mai mic decat data de sfarsit!", "Atentie", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_delaActionPerformed
+
+    private void panalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_panalaActionPerformed
+        if (!Validator.areDatesValid(dela.getDate(), panala.getDate())) {
+            panala.setDate(null);
+            JOptionPane.showMessageDialog(this, "Data de inceput trebuie sa fie strict mai mic decat data de sfarsit!", "Atentie", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_panalaActionPerformed
+
+    private boolean allFieldsCompleted() {
+        return !(dela.getDate() == null || panala.getDate() == null || denumireTextField.getText().isEmpty() || descriptionEdit.getText().isEmpty());
+    }
 
     public boolean isOk() {
         return ok;
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaButton;
     private javax.swing.JButton cancelButton;
@@ -313,4 +362,22 @@ public class ProjectForm extends javax.swing.JDialog {
     private javax.swing.JTable phasesTable;
     private javax.swing.JButton stergeButton;
     // End of variables declaration//GEN-END:variables
+
+    private String getChildName() {
+        switch (prj.getTip()) {
+            case EVENIMENT_ADMINISTRATIV:
+                return "activitate";
+            case PROIECT_STIINTIFIC:
+                return "faza";
+            default:
+                return "";
+        }
+    }
+
+    private boolean isSelected() {
+        if (phasesTable.getSelectedRow() > -1) {
+            return true;
+        }
+        return false;
+    }
 }

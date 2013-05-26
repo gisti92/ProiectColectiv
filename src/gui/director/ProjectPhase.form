@@ -54,11 +54,11 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="modificaButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="stergeButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="137" max="32767" attributes="0"/>
+                              <Component id="btnSterge" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Component id="descriereTextField" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="354" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
@@ -110,7 +110,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="adaugaButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="modificaButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="stergeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnSterge" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -179,14 +179,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modificaButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="stergeButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Sterge"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stergeButtonActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="okButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
@@ -216,6 +208,14 @@
     <Component class="org.jdesktop.swingx.JXDatePicker" name="dela">
     </Component>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="panala">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSterge">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sterge"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStergeActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

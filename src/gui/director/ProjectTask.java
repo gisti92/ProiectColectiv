@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
-import model.director.CadruDidactic;
+import model.CadruDidactic;
 import model.director.ResursaFinanciara;
-import model.director.ResursaLogistica;
+import model.ResursaLogistica;
 import model.director.Task;
 import model.director.TimeInterval;
 import persistence.DirectorRepositoryDB;
@@ -38,6 +38,7 @@ public class ProjectTask extends javax.swing.JDialog {
     public ProjectTask(JDialog parent,boolean modal,Task t, boolean update) throws SQLException {
         super(parent,modal);
         initComponents();
+        setLocationRelativeTo(parent);
         
         task = t;
         

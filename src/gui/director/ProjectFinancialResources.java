@@ -26,6 +26,7 @@ public class ProjectFinancialResources extends javax.swing.JDialog {
     public ProjectFinancialResources(JDialog parent,boolean modal,Task t) {
         super(parent,modal);
         initComponents();
+        setLocationRelativeTo(parent);
         
         task = t;
         

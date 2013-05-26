@@ -4,11 +4,18 @@
  */
 package gui.publicul.informatiiresurse;
 
-import businessLogic.Controller;
+import businessLogic.PubliculController;
+import gui.sharedmodels.CadreDidacticeTM;
+import gui.sharedmodels.EchipamenteTM;
+import gui.sharedmodels.SaliTM;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.CadruDidactic;
+import model.Echipament;
+import model.Sala;
 
 /**
  *
@@ -16,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InformatiResurse extends javax.swing.JDialog {
 
-    private Controller contr = Controller.getInstance();
+    private PubliculController contr = PubliculController.getInstance();
 
     /**
      * Creates new form InformatiResurse
@@ -29,7 +36,7 @@ public class InformatiResurse extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
-    private void bindEvents() { 
+    private void bindEvents() {
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,19 +51,21 @@ public class InformatiResurse extends javax.swing.JDialog {
                 case 0:
                     clearTableResurse();
                     break;
-                case 1:
-                     contr.refreshResurseUmaneTM();
-                     tabelResurse.setModel(contr.getResurseUmaneTM());
+                case 1: {
+                    List<CadruDidactic> list = contr.getResurseUmane();
+                    tabelResurse.setModel(new CadreDidacticeTM(list));
                     break;
-                case 2:
-                    contr.refreshSaliTM();
-                    tabelResurse.setModel(contr.getSaliTM());
+                }
+                case 2: {
+                    List<Sala> list = contr.getSali();
+                    tabelResurse.setModel(new SaliTM(list));
                     break;
-                case 3:
-                    contr.refreshEchipamenteTM();
-                    tabelResurse.setModel(contr.getEchipamenteTM());
+                }
+                case 3: {
+                    List<Echipament> list = contr.getEchipamente();
+                    tabelResurse.setModel(new EchipamenteTM(list));
                     break;
-                //TODO adauga restul
+                }
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Eroare In Informatii Resurse", JOptionPane.ERROR_MESSAGE);
@@ -143,7 +152,6 @@ public class InformatiResurse extends javax.swing.JDialog {
     private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JComboBox comboBox;
