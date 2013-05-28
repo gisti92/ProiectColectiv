@@ -12,10 +12,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.CadruDidactic;
 import model.Orar;
 import model.administrator.AlteActivitati;
 import model.administrator.State;
+import model.director.ResursaFinanciara;
+import static model.director.ResursaFinanciara.TipCheltuiala.CHELTUIALA_CU_MANOPERA;
+import static model.director.ResursaFinanciara.TipCheltuiala.CHELTUIALA_DE_LOGISTICA;
+import static model.director.ResursaFinanciara.TipCheltuiala.CHELTUIELA_CU_MOBILITATE;
 
 /**
  *
@@ -277,5 +285,162 @@ public class AdministratorRepository extends BaseRepository {
         ResultSet rs = p.executeQuery();
         rs.next();
         return rs.getInt(1);
+    }
+
+    public List<ResursaFinanciara> getResurseFinanciare() throws Exception {
+        ResultSet rs = null;
+        List<ResursaFinanciara> list = new LinkedList<ResursaFinanciara>();
+        try {
+            PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Resurse_Financiare");
+            rs = statement.executeQuery();
+
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String descriere = rs.getString(2);
+                int suma = rs.getInt(3);
+                int tip = rs.getInt(4);
+
+                ResursaFinanciara rf = new ResursaFinanciara();
+                rf.setId(id);
+                rf.setDescriere(descriere);
+                rf.setSuma(suma);
+                ResursaFinanciara.TipCheltuiala tipC = null;
+                switch (tip) {
+                    case 1:
+                        tipC = ResursaFinanciara.TipCheltuiala.CHELTUIELA_CU_MOBILITATE;
+                        break;
+                    case 2:
+                        tipC = ResursaFinanciara.TipCheltuiala.CHELTUIALA_CU_MANOPERA;
+                        break;
+                    case 3:
+                        tipC = ResursaFinanciara.TipCheltuiala.CHELTUIALA_DE_LOGISTICA;
+                        break;
+                }
+                rf.setTip(tipC);
+                list.add(rf);
+            }
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+        return list;
+    }
+
+    public void addResursaFinanciara(ResursaFinanciara rf) throws Exception {
+        Connection conn = getConnection();
+        PreparedStatement p;
+        try {
+            p = conn.prepareStatement("INSERT INTO Resurse_Financiare  VALUES(?,?,?)");
+            p.setString(1, rf.getDescriere());
+            p.setInt(2, rf.getSuma());
+            int tip = 0;
+            if (rf.getTip() != null) {
+                switch (rf.getTip()) {
+                    case CHELTUIELA_CU_MOBILITATE:
+                        tip = 1;
+                        break;
+                    case CHELTUIALA_CU_MANOPERA:
+                        tip = 2;
+                        break;
+                    case CHELTUIALA_DE_LOGISTICA:
+                        tip = 3;
+                        break;
+                }
+            }
+            p.setInt(3, tip);
+            p.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new Exception(ex.getMessage());
+            }
+        }
+    }
+
+    public int getSumaResurseFinanciare() throws Exception {
+        ResultSet rs = null;
+        int suma=0;
+        try {
+            PreparedStatement statement = getConnection().prepareStatement("SELECT CASE WHEN not exists ( select 1 from Resurse_Financiare) THEN 0 ELSE sum(suma) END FROM Resurse_Financiare");
+            rs = statement.executeQuery();
+           if (rs.next()){
+               suma = rs.getInt(1);
+           }
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                throw new Exception(e.getMessage());
+            }
+        }
+        return suma;
+    }
+
+    public void stergeResursaFinancara(int id) throws Exception {
+       Connection conn = getConnection();
+        PreparedStatement p;
+        try {
+            p = conn.prepareStatement("delete from Resurse_Financiare where id=?");
+            p.setInt(1, id);
+            p.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new Exception(ex.getMessage());
+            }
+        }
+    }
+
+    public void smodificaResursaFinanciara(ResursaFinanciara rf) throws Exception {
+        Connection conn = getConnection();
+        PreparedStatement p;
+        try {
+            p = conn.prepareStatement("UPDATE Resurse_Financiare  SET descriere=?, suma=?, tip=? where id=?");
+            p.setString(1, rf.getDescriere());
+            p.setInt(2, rf.getSuma());
+            int tip = 0;
+            if (rf.getTip() != null) {
+                switch (rf.getTip()) {
+                    case CHELTUIELA_CU_MOBILITATE:
+                        tip = 1;
+                        break;
+                    case CHELTUIALA_CU_MANOPERA:
+                        tip = 2;
+                        break;
+                    case CHELTUIALA_DE_LOGISTICA:
+                        tip = 3;
+                        break;
+                }
+            }
+            p.setInt(3, tip);
+            p.setInt(4, rf.getId());
+            p.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new Exception(ex.getMessage());
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import gui.administrator.gestionezaresurse.GestioneazaResurseUmane;
 import javax.swing.JFrame;
 
 import businessLogic.Controller;
+import gui.administrator.gestionezaresurse.GestioneazaResurseFinanciare;
 import gui.administrator.gestionezaresurse.GestioneazaResurseLogistice;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -211,7 +212,9 @@ public class UiAdministrator extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInregResUmaneActionPerformed
 
     private void btnInregResFinanciareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResFinanciareActionPerformed
-        showNotYetSupportedDialog();
+        setVisible(false);
+        new GestioneazaResurseFinanciare(this,true).setVisible(true);
+        setVisible(true);
     }//GEN-LAST:event_btnInregResFinanciareActionPerformed
 
     private void btnInregResLogisticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInregResLogisticeActionPerformed

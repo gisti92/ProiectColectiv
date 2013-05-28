@@ -35,7 +35,7 @@
                   <Component id="btnImportaState" max="32767" attributes="0"/>
                   <Component id="btnInregResUmane" max="32767" attributes="0"/>
                   <Component id="btnInregResFinanciare" max="32767" attributes="0"/>
-                  <Component id="btnInregResLogistice" min="-2" pref="273" max="-2" attributes="0"/>
+                  <Component id="btnInregResLogistice" alignment="0" min="-2" pref="273" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="30" max="32767" attributes="0"/>
           </Group>
