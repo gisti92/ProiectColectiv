@@ -33,6 +33,8 @@ CREATE PROCEDURE stergeTabele AS
 	IF EXISTS (SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Sali') DROP TABLE Sali
 	IF EXISTS (SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Echipamente') DROP TABLE Echipamente
 	IF EXISTS (SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'logins') DROP TABLE logins
+	IF EXISTS (SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Resurse_Financiare') DROP TABLE Resurse_Financiare
+
 GO
 
 --**********************************************************************************************************
@@ -45,8 +47,8 @@ CREATE PROCEDURE creareTabele AS
 	SET NoCount ON
 	--**************************************** Loginuri ************************************************
 	CREATE TABLE logins(
-		userid varchar(30) PRIMARY KEY,
-		pass varchar(30) not null,
+		userid varchar(50) PRIMARY KEY,
+		pass varchar(50) not null,
 		permissiune varchar(1) not null
 	)
 
@@ -57,10 +59,10 @@ CREATE PROCEDURE creareTabele AS
 	--****************************************  Cadre_Didactice ************************************************
 	CREATE TABLE Cadre_Didactice(
 		Id_Cadru_Didactic	INT IDENTITY(1,1) PRIMARY KEY,
-		pozitia VARCHAR(5) NOT NULL,
-		den_post VARCHAR (20),
-		nume VARCHAR (30) NOT NULL,
-		functia VARCHAR (30),
+		pozitia VARCHAR(10) NOT NULL,
+		den_post VARCHAR (50),
+		nume VARCHAR (50) NOT NULL,
+		functia VARCHAR (50),
 		tit_vac VARCHAR (3) NOT NULL,
 		CONSTRAINT unic_cadre_didactice UNIQUE(pozitia, den_post, nume, functia, tit_vac),
 		CONSTRAINT check_tit_vac CHECK(tit_vac in ('T','V'))
@@ -68,9 +70,11 @@ CREATE PROCEDURE creareTabele AS
 	
 	--************************************** Loginuri_Cadre_Didactice ******************************************
 	CREATE TABLE Loginuri_Cadre_Didactice(
-		userid varchar(30) PRIMARY KEY REFERENCES logins(userid),
+		userid varchar(50) PRIMARY KEY REFERENCES logins(userid),
 		ID_Cadru_Didactic INT REFERENCES Cadre_Didactice(Id_Cadru_Didactic) UNIQUE
 	)
+
+	
 
 	--*********************************************  Discipline ************************************************
 	CREATE TABLE Discipline(
@@ -81,13 +85,13 @@ CREATE PROCEDURE creareTabele AS
 	--************************************************ Sectii **************************************************
 	CREATE TABLE Sectii(
 		Id_Sectie INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) UNIQUE NOT NULL
+		denumire VARCHAR (50) UNIQUE NOT NULL
 	) 
 
 	--************************************************ Sali ****************************************************
 	CREATE TABLE Sali(
 		Id_Sala INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) NOT NULL, 
+		denumire VARCHAR (50) NOT NULL, 
 		capacitate SMALLINT ,
 		CONSTRAINT unic_sali UNIQUE (denumire, capacitate)
 	) 
@@ -95,13 +99,13 @@ CREATE PROCEDURE creareTabele AS
 	--********************************************** Echipamente ***********************************************
 	CREATE TABLE Echipamente(
 		Id_Echipament INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) UNIQUE NOT NULL
+		denumire VARCHAR (50) UNIQUE NOT NULL
 	) 
 
 	--********************************************** Formatii **************************************************
 	CREATE TABLE Formatii(
 		Id_Formatie INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) UNIQUE NOT NULL,
+		denumire VARCHAR (50) UNIQUE NOT NULL,
 		Id_Sectie INT REFERENCES Sectii(Id_Sectie) NOT NULL,
 		an SMALLINT NOT NULL,
 		grupa SMALLINT NOT NULL
@@ -153,6 +157,16 @@ CREATE PROCEDURE creareTabele AS
 		CONSTRAINT check_frecventa_orar CHECK (frecventa in (0,1,2)),
 		CONSTRAINT check_ziua_orar CHECK (ziua >= 1 and ziua <=7),
 		CONSTRAINT check_tipOra_orar CHECK (tip in ('L','S','C'))
+	)
+	--*********************************** Resurse_Financiare ******************************************
+	-- tip 1 - CheltuieliCuMobilitate
+	-- tip 2 - CheltuieliCuManopera
+	-- tip 3 - CheltuieliDeLogistica
+	CREATE TABLE Resurse_Financiare(
+		id int IDENTITY(1,1) PRIMARY KEY,
+		descriere VARCHAR(200), 	
+		suma INT,
+		tip smallint
 	)
 	SET NoCount OFF
 GO
