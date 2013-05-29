@@ -64,7 +64,7 @@ public class SelectAnDialog extends javax.swing.JDialog {
         cb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel1.setText("Selectati anul dupa care sa se efectueze filtrarea:");
+        jLabel1.setText("Selectati anul dupa care doriti sa se efectueze filtrarea:");
 
         btnFiltreaza.setText("Filtreaza");
         btnFiltreaza.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +97,7 @@ public class SelectAnDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFiltreaza))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         pack();
