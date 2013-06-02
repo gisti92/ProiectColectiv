@@ -22,6 +22,7 @@ public class GestioneazaResurseUmane extends javax.swing.JDialog {
 
     private AdministratorController contr = AdministratorController.getInstance();
     private CadreDidacticeTM resurseUmaneTM = new CadreDidacticeTM();
+
     /**
      * Creates new form GestioneazaResurseUmaneDialog
      */
@@ -39,7 +40,7 @@ public class GestioneazaResurseUmane extends javax.swing.JDialog {
             resurseUmaneTM.setList(contr.getResurseUmane());
         } catch (Exception ex) {
             Logger.getLogger(GestioneazaResurseUmane.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this,"Eroare la incarcare lista de carde didactice!","Eroare",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Eroare la incarcare lista de carde didactice!", "Eroare", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -240,10 +241,10 @@ public class GestioneazaResurseUmane extends javax.swing.JDialog {
         contr.modificaCadruDidactic(model.getIdByRow(row), txtPozitia.getText(), txtDenumirePost.getText(), txtNume.getText(), txtFunctia.getText(), tit_vac);
         refreshResurseUmaneTable();
     }//GEN-LAST:event_btnModificaActionPerformed
-    public String getBlabla(){
+    public String getBlabla() {
         return txtDenumirePost.getText();
     }
-    
+
     private void btnAdaugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdaugaActionPerformed
 
         if (!fieldsNotEmpty()) {
@@ -260,6 +261,10 @@ public class GestioneazaResurseUmane extends javax.swing.JDialog {
     private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
         if (!rowSelected()) {
             JOptionPane.showMessageDialog(this, "Selectati o linie! ", "Eroare ", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = JOptionPane.showConfirmDialog(this, "Sigur vreti sa efectuati stergerea? ", "?", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.NO_OPTION) {
             return;
         }
         CadreDidacticeTM model = (CadreDidacticeTM) tabelCadreDidactice.getModel();

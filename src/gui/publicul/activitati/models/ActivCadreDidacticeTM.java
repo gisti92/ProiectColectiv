@@ -7,26 +7,25 @@ package gui.publicul.activitati.models;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import model.Formatie;
+import model.CadruDidactic;
 
 /**
  *
  * @author Deea
  */
-public class FormatiiTM extends AbstractTableModel {
+public class ActivCadreDidacticeTM extends AbstractTableModel{
 
-//    private String[] header = {" Id Formatie ", "Denumire formatie", "Id Sectie", "An ", " Grupa"};
-    private String[] header = {"Denumire formatie"};
-    private List<Formatie> list = new ArrayList<Formatie>();
+      private String[] header = {"Denumire post", "Nume"};
+    private List<CadruDidactic> list = new ArrayList<CadruDidactic>();
 
-    public FormatiiTM(List<Formatie> list) {
-        this.list = list;
+    public ActivCadreDidacticeTM(List<CadruDidactic> list){
+        this.list=list;
         fireTableDataChanged();
     }
-
-    public FormatiiTM() {
+    
+    public ActivCadreDidacticeTM(){
     }
-
+    
     @Override
     public int getRowCount() {
         return list.size();
@@ -41,25 +40,17 @@ public class FormatiiTM extends AbstractTableModel {
         if (rowIndex < 0 || rowIndex >= list.size()) {
             return -1;
         } else {
-            return list.get(rowIndex).getId_Formatie();
+            return list.get(rowIndex).getId();
         }
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
-//            case 0:
-//                return list.get(rowIndex).getId_Formatie();
-//            case 1:
-//                return list.get(rowIndex).getDenumire();
-//            case 2:
-//                return list.get(rowIndex).getId_Sectie();
-//            case 3:
-//                return list.get(rowIndex).getAn();
-//            case 4:
-//                return list.get(rowIndex).getGrupa();
-                 case 0:
-                return list.get(rowIndex).getDenumire();
+            case 0:
+                return list.get(rowIndex).getDenumirePost();
+            case 1:
+                return list.get(rowIndex).getNume();
             default:
                 return null;
         }
@@ -79,13 +70,14 @@ public class FormatiiTM extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void addRow(Formatie row) {
+    public void addRow(CadruDidactic row) {
         list.add(row);
         fireTableDataChanged();
     }
 
-    public void setList(List<Formatie> list) {
+    public void setList(List<CadruDidactic> list) {
         this.list = list;
         fireTableDataChanged();
     }
+    
 }

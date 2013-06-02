@@ -37,7 +37,7 @@ public class ProjectLogisticResources extends javax.swing.JDialog {
         
         logistics.addAll(t.getResurseLogistice());
         
-        logisticResourcesTable.setModel(new LogisticResourcesTableModel(logistics));
+        refreshLogisticsTable();
         
     }
     
@@ -172,7 +172,7 @@ public class ProjectLogisticResources extends javax.swing.JDialog {
             if (diag.isOk()) {
                 ResursaLogistica res = diag.getSelected();
                 logistics.add(res);
-                logisticResourcesTable.setModel(new LogisticResourcesTableModel(logistics));
+                refreshLogisticsTable();
             }
             
         } catch (SQLException ex) {
@@ -188,7 +188,7 @@ public class ProjectLogisticResources extends javax.swing.JDialog {
         
         logistics.remove(logistics.get(row));
         
-        logisticResourcesTable.setModel(new LogisticResourcesTableModel(logistics));
+        refreshLogisticsTable();
         
     }//GEN-LAST:event_stergeButtonActionPerformed
 
@@ -200,4 +200,8 @@ public class ProjectLogisticResources extends javax.swing.JDialog {
     private javax.swing.JButton okButton;
     private javax.swing.JButton stergeButton;
     // End of variables declaration//GEN-END:variables
+
+    private void refreshLogisticsTable() {
+        logisticResourcesTable.setModel(new LogisticResourcesTableModel(logistics));
+    }
 }

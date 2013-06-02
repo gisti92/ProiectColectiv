@@ -5,6 +5,7 @@
 package gui.publicul.activitati;
 
 import businessLogic.Controller;
+import gui.publicul.activitati.models.ActivCadreDidacticeTM;
 import gui.sharedmodels.CadreDidacticeTM;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,7 +21,7 @@ import model.CadruDidactic;
 public class SelectCadruDidacticDialog extends javax.swing.JDialog {
 
     private Controller contr = Controller.getInstance();
-    private CadreDidacticeTM tm;
+    private ActivCadreDidacticeTM atm;
     private boolean selected = false;
 
     /**
@@ -34,8 +35,8 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
         List<CadruDidactic> list;
         try {
             list = contr.getResurseUmane();
-            tm = new CadreDidacticeTM(list);
-            tableCD.setModel(tm);
+            atm = new ActivCadreDidacticeTM(list);
+            tableCD.setModel(atm);
         } catch (Exception ex) {
             Logger.getLogger(SelectCadruDidacticDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Eroare la incarcarea Cadrelor Didactice", "Eroare", JOptionPane.ERROR_MESSAGE);
@@ -51,7 +52,7 @@ public class SelectCadruDidacticDialog extends javax.swing.JDialog {
         if (index < 0) {
             return -1;
         }
-        int cdId = tm.getIdByRow(index);
+        int cdId = atm.getIdByRow(index);
         return cdId;
     }
 
