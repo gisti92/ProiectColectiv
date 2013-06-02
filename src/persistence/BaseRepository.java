@@ -66,7 +66,7 @@ public class BaseRepository {
         Connection con = null;
         try {
             Class.forName(props.getProperty("jdbc.driver"));
-            con = DriverManager.getConnection(props.getProperty("jdbc.url"), props.getProperty("jdbc.user"), props.getProperty("jdbc.pass"));
+            con = DriverManager.getConnection(props.getProperty("jdbc.url"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Eroare incarcare driver " + e.getMessage());
         } catch (SQLException e) {

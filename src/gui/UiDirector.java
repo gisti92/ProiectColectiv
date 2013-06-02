@@ -6,7 +6,7 @@ package gui;
 
 import businessLogic.Controller;
 import gui.director.ProjectManagement;
-import gui.director.programestudiu.ProgrameDeStudiu;
+import gui.director.programestudiu.SectiiDialog;
 import javax.swing.JFrame;
 import model.users.User;
 import model.director.Proiect;
@@ -95,6 +95,11 @@ public class UiDirector extends javax.swing.JFrame {
         });
 
         raportDeAlocareButton.setText("Rapoarte de alocare");
+        raportDeAlocareButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                raportDeAlocareButtonActionPerformed(evt);
+            }
+        });
 
         btnExit.setText("Exit");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +122,7 @@ public class UiDirector extends javax.swing.JFrame {
                     .addComponent(granturiCercetareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(evenimentAdministrativButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(programDeStudiu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(raportDeAlocareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(raportDeAlocareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -154,15 +159,20 @@ public class UiDirector extends javax.swing.JFrame {
     }//GEN-LAST:event_granturiCercetareButtonActionPerformed
 
     private void programDeStudiuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_programDeStudiuActionPerformed
-        
-        ProgrameDeStudiu stud = new ProgrameDeStudiu(this,true);
-        stud.setVisible(true);
+        SectiiDialog sect = new SectiiDialog();
+        sect.setVisible(true);
+        //ProgrameDeStudiu stud = new ProgrameDeStudiu(this,true);
+        //stud.setVisible(true);
         
     }//GEN-LAST:event_programDeStudiuActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
           exit();
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void raportDeAlocareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_raportDeAlocareButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_raportDeAlocareButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

@@ -4,22 +4,20 @@
  */
 package gui.director.programestudiu.models;
 
-import gui.director.models.*;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import model.director.Faza;
-import model.director.programestudiu.Disciplina;
+import model.director.programestudiu.DisciplinePlan;
 
 /**
  *
- * @author Artiom.Casapu
+ * @author Nicu
  */
 public class DisciplineTableModel extends AbstractTableModel {
 
-    private String[] columns = {"Denumire", "Nr credite"};
-    private List<Disciplina> discipline;
+    private String[] columns = {"Disciplina", "C", "S", "L", "P", "Finalizare", "Nr credite"};
+    private List<DisciplinePlan> discipline;
     
-    public DisciplineTableModel(List<Disciplina> discipline) {
+    public DisciplineTableModel(List<DisciplinePlan> discipline) {
         this.discipline = discipline;
     }
     
@@ -37,15 +35,25 @@ public class DisciplineTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         return columns[column];
     }
+    
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return discipline.get(rowIndex).getDenumire();
+                return discipline.get(rowIndex).getDisc();
             case 1:
+                return discipline.get(rowIndex).getOreCurs();
+            case 2:
+                return discipline.get(rowIndex).getOreSem();
+            case 3:
+                return discipline.get(rowIndex).getOreLab();
+            case 4:
+                return discipline.get(rowIndex).getOrePr();
+            case 5:
+                return discipline.get(rowIndex).getFinalizare();
+            case 6:
                 return discipline.get(rowIndex).getNrCredite();
-
         }
         return null;
     }

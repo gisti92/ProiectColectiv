@@ -25,10 +25,9 @@ import model.Sala;
 import model.director.Task;
 import model.director.Task.TaskType;
 import model.director.TimeInterval;
-import model.director.programestudiu.CercStudentesc;
-import model.director.programestudiu.Disciplina;
-import model.director.programestudiu.ProgramDeStudiuModel;
-import model.director.programestudiu.Semestru;
+import model.director.programestudiu.DisciplinePlan;
+import model.director.programestudiu.PlanInv;
+import model.director.programestudiu.SectieModel;
 
 /**
  *
@@ -626,7 +625,7 @@ public class DirectorRepositoryDB extends BaseRepository {
         deleteProject(p);
         addProject(p);
     }
-
+/*
     public List<ProgramDeStudiuModel> getPrograme() throws SQLException {
 
         List<ProgramDeStudiuModel> result = new ArrayList<ProgramDeStudiuModel>();
@@ -871,4 +870,207 @@ public class DirectorRepositoryDB extends BaseRepository {
         removeProgramDeStudiu(p);
         addProgramDeStudiu(p);
     }
+    */
+    public List<SectieModel> getSectii() throws SQLException {
+
+       List<SectieModel> result = new ArrayList<SectieModel>();
+
+        String query = "SELECT * FROM Sectii";
+
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+
+            SectieModel model = new SectieModel();
+
+            int id = rs.getInt("Id_Sectie");
+            String denumire = rs.getString("denumire");
+            int nrSemestre = rs.getInt("nr_semestre");
+
+            model.setId(id);
+            model.setDenumire(denumire);
+            model.setNrSemestre(nrSemestre);
+
+            model.getPlanuriDeInvatamint().addAll(getPlanuriForSectie(model));
+            
+            result.add(model);
+        }
+
+        return result;
+
+    }
+    
+    public List<PlanInv> getPlanuriForSectie(SectieModel sectie) throws SQLException {
+        ArrayList<PlanInv> result = new ArrayList<PlanInv>();
+        
+        String query = "SELECT * FROM ProgrameDeStudiu WHERE sectie_id = " + sectie.getId();
+
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            PlanInv plan = new PlanInv();
+            
+            plan.setDenumire(rs.getString("denumire_program"));
+            plan.setId(rs.getInt("program_id"));
+            plan.setSemestru(rs.getInt("semestru"));
+            
+            plan.getDisciplineInPlan().addAll(getDisciplineForPlan(plan));
+          
+            result.add(plan);
+        }
+        
+        return result;
+    }
+    
+    public List<DisciplinePlan> getDisciplineForPlan(PlanInv plan) throws SQLException {
+         ArrayList<DisciplinePlan> result = new ArrayList<DisciplinePlan>();
+        
+        String query = "SELECT * FROM PlanuriInvatamint WHERE program_id = " + plan.getId();
+
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            DisciplinePlan disc = new DisciplinePlan();
+            
+            disc.setDisc(rs.getString("disciplina"));
+            disc.setFinalizare(rs.getString("finalizare"));
+            disc.setNrCredite(rs.getInt("nr_credite"));
+            disc.setOreCurs(rs.getInt("ore_curs"));
+            disc.setOreLab(rs.getInt("ore_lab"));
+            disc.setOrePr(rs.getInt("ore_pr"));
+            disc.setOreSem(rs.getInt("ore_sem"));
+            
+            result.add(disc);
+        }
+        
+        return result;
+    }
+    
+    /*INSERT*/
+    public void insertSectie(SectieModel sectie) throws SQLException {
+
+        String query = "INSERT INTO Sectii VALUES (?,?)";
+
+        Connection con = getConnection();
+        
+        con.setAutoCommit(false);
+        
+        PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(2, sectie.getNrSemestre());
+        stmt.setString(1, sectie.getDenumire());
+        
+        stmt.executeUpdate();
+
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        int id = -1;
+        
+        if (rs.next()) {
+            id = rs.getInt(1);
+        }
+        
+        sectie.setId(id);
+        for (PlanInv plan: sectie.getPlanuriDeInvatamint()) {
+            insertPlan(plan, sectie, con);
+        }
+        
+        con.commit();
+    }
+    
+    public void insertPlan(PlanInv plan, SectieModel sectie, Connection connection) throws SQLException {
+        String query = "INSERT INTO ProgrameDeStudiu VALUES (?,?,?)";
+
+        PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(1, sectie.getId());
+        stmt.setString(2, plan.getDenumire());
+        stmt.setInt(3, plan.getSemestru());
+        
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+         
+        int id = -1;
+        if (rs.next()) {
+            id = rs.getInt(1);
+        }
+        
+        plan.setId(id);
+        
+        for (DisciplinePlan disc : plan.getDisciplineInPlan()) {
+            insertDisciplineIntoPlan(disc, plan, connection);
+        }
+        
+    }
+    
+    public void insertDisciplineIntoPlan(DisciplinePlan disc, PlanInv plan, Connection connection) throws SQLException {
+        String query = "INSERT INTO PlanuriInvatamint VALUES(?,?,?,?,?,?,?,?)";
+
+        PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        stmt.setInt(1, plan.getId());
+        stmt.setString(2, disc.getDisc());
+        stmt.setInt(3, disc.getOreCurs());
+        stmt.setInt(4, disc.getOreSem());
+        stmt.setInt(5, disc.getOreLab());
+        stmt.setInt(6, disc.getOrePr());
+        stmt.setString(7, disc.getFinalizare());
+        stmt.setInt(8, disc.getNrCredite());
+        
+        
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+    }
+    
+    /*DELETE*/
+    public void deleteSectie(SectieModel sectie) throws SQLException {
+        String query = "DELETE FROM Sectii WHERE Id_Sectie = " + sectie.getId();
+
+        Connection con = getConnection();
+        
+        con.setAutoCommit(false);
+        
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        for (PlanInv plan : sectie.getPlanuriDeInvatamint()) {
+            deletePlanInv(plan, con);
+        }
+        
+        stmt.executeUpdate();
+        
+        con.commit();
+    }
+    
+    public void deletePlanInv(PlanInv plan, Connection connection) throws SQLException {
+        String query = "DELETE FROM PlanuriInvatamint WHERE program_id = " + plan.getId();
+        PreparedStatement stmt = connection.prepareStatement(query);
+
+        stmt.executeUpdate();
+        
+        query = "DELETE FROM ProgrameDeStudiu WHERE program_id = " + plan.getId();
+        stmt = connection.prepareStatement(query);
+
+        stmt.executeUpdate();
+        
+    }
+    
+    
+    /*UPDATE*/
+    public void updateSectie(SectieModel sectie) throws SQLException {
+        deleteSectie(sectie);
+        insertSectie(sectie);
+    }
+    
 }

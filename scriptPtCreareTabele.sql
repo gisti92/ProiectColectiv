@@ -79,9 +79,12 @@ CREATE PROCEDURE creareTabele AS
 	)
 
 	--************************************************ Sectii **************************************************
+	
 	CREATE TABLE Sectii(
+		
 		Id_Sectie INT IDENTITY(1,1) PRIMARY KEY,
-		denumire VARCHAR (30) UNIQUE NOT NULL
+		denumire VARCHAR (30) UNIQUE NOT NULL,
+		nr_semestre INT 
 	) 
 
 	--************************************************ Sali ****************************************************
@@ -313,13 +316,33 @@ EXEC creareTabele
 		program_id INT
 	)
 
+	--Plan invatamint--
+	DROP TABLE ProgrameDeStudiu
+	CREATE TABLE ProgrameDeStudiu (
+		program_id INT PRIMARY KEY IDENTITY(1,1),
+		sectie_id INT,
+		denumire_program VARCHAR(50),
+		semestru INT
+	)
 
+	--Discipline in plan--
+	DROP TABLE PlanuriInvatamint
+	CREATE TABLE PlanuriInvatamint (
+		program_id INT,
+		disciplina VARCHAR(50),
+		ore_curs INT,
+		ore_sem INT,
+		ore_lab INT,
+		ore_pr INT,
+		finalizare VARCHAR(1),
+		nr_credite INT		
+	)
 
 	insert into Cadre_Didactice values ('21','Lect','Cioban Vasile','Lect. dr.','T')
 
-insert into Sectii values ('Informatica - LR')
-insert into Sectii values ('Ingineria informatiei - LR') 
-insert into Sectii values ('Matematica informatica - LR')
+insert into Sectii values ('Informatica - LR',6)
+insert into Sectii values ('Ingineria informatiei - LR', 6) 
+insert into Sectii values ('Matematica informatica - LR', 6)
 
 insert into Sali values ('L302',30)
 insert into Sali values ('L306',30)
