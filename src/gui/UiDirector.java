@@ -5,6 +5,7 @@
 package gui;
 
 import businessLogic.Controller;
+import gui.director.CercuriStudentestiDialog;
 import gui.director.ProjectManagement;
 import gui.director.programestudiu.SectiiDialog;
 import javax.swing.JFrame;
@@ -68,8 +69,8 @@ public class UiDirector extends javax.swing.JFrame {
         granturiCercetareButton = new javax.swing.JButton();
         evenimentAdministrativButton = new javax.swing.JButton();
         programDeStudiu = new javax.swing.JButton();
-        raportDeAlocareButton = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        cercuriStudenti = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,13 +95,6 @@ public class UiDirector extends javax.swing.JFrame {
             }
         });
 
-        raportDeAlocareButton.setText("Rapoarte de alocare");
-        raportDeAlocareButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                raportDeAlocareButtonActionPerformed(evt);
-            }
-        });
-
         btnExit.setText("Exit");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,22 +102,31 @@ public class UiDirector extends javax.swing.JFrame {
             }
         });
 
+        cercuriStudenti.setText("Cercuri de studenti");
+        cercuriStudenti.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cercuriStudentiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(155, Short.MAX_VALUE)
-                .addComponent(btnExit)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(granturiCercetareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(evenimentAdministrativButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(programDeStudiu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(raportDeAlocareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(155, Short.MAX_VALUE)
+                        .addComponent(btnExit))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(granturiCercetareButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(evenimentAdministrativButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(programDeStudiu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cercuriStudenti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,8 +138,8 @@ public class UiDirector extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(programDeStudiu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(raportDeAlocareButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addComponent(cercuriStudenti)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
@@ -170,15 +173,17 @@ public class UiDirector extends javax.swing.JFrame {
           exit();
     }//GEN-LAST:event_btnExitActionPerformed
 
-    private void raportDeAlocareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_raportDeAlocareButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_raportDeAlocareButtonActionPerformed
+    private void cercuriStudentiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cercuriStudentiActionPerformed
+      
+            CercuriStudentestiDialog cercStud = new CercuriStudentestiDialog(true);
+            cercStud.setVisible(true);
+    }//GEN-LAST:event_cercuriStudentiActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton cercuriStudenti;
     private javax.swing.JButton evenimentAdministrativButton;
     private javax.swing.JButton granturiCercetareButton;
     private javax.swing.JButton programDeStudiu;
-    private javax.swing.JButton raportDeAlocareButton;
     // End of variables declaration//GEN-END:variables
 }

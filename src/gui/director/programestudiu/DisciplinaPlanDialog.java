@@ -5,6 +5,9 @@
 package gui.director.programestudiu;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import model.director.programestudiu.DisciplinePlan;
 
 /**
@@ -24,7 +27,6 @@ public class DisciplinaPlanDialog extends javax.swing.JDialog {
         initComponents();
         
         finalizareCombo.setModel(new DefaultComboBoxModel(finalizareOpts));
-        
         this.disc = disc;
         
         if (update) {
@@ -106,6 +108,11 @@ public class DisciplinaPlanDialog extends javax.swing.JDialog {
         nrCrediteSpinner.setValue(30);
 
         finalizareCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        finalizareCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                finalizareComboActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("C");
 
@@ -148,9 +155,6 @@ public class DisciplinaPlanDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(disciplinaTextField)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(prSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -167,8 +171,12 @@ public class DisciplinaPlanDialog extends javax.swing.JDialog {
                                 .addComponent(finalizareCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 188, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(labSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(disciplinaTextField)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(okButton)
@@ -214,15 +222,22 @@ public class DisciplinaPlanDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        ok = true;
-        updateDisciplina();
-        dispose();
+        if (!"".equals(disciplinaTextField.getText())){
+           ok = true;
+           updateDisciplina();
+           dispose();   
+        }
+        
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         ok = false;
         dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void finalizareComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizareComboActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_finalizareComboActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

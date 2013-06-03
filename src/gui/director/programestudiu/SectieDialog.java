@@ -4,6 +4,7 @@
  */
 package gui.director.programestudiu;
 
+import gui.director.CercuriStudentestiDialog;
 import gui.director.programestudiu.models.PlanuriTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,8 @@ public class SectieDialog extends javax.swing.JDialog {
         adaugaPrStudiuButton = new javax.swing.JButton();
         stergePrStudiuButton = new javax.swing.JButton();
         salveazaButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        cercuriDeStudentiButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -133,15 +136,39 @@ public class SectieDialog extends javax.swing.JDialog {
             }
         });
 
+        jButton1.setText("Cancel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        cercuriDeStudentiButton.setText("Cercuri de Studenti");
+        cercuriDeStudentiButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cercuriDeStudentiButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(adaugaPrStudiuButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(modificaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(stergePrStudiuButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cercuriDeStudentiButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -154,24 +181,19 @@ public class SectieDialog extends javax.swing.JDialog {
                                         .addComponent(jLabel2)
                                         .addGap(18, 18, 18)
                                         .addComponent(nrSemestreComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(modificaButton)
-                        .addGap(70, 70, 70)
-                        .addComponent(adaugaPrStudiuButton)
-                        .addGap(61, 61, 61)
-                        .addComponent(stergePrStudiuButton)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(salveazaButton)))
-                .addContainerGap())
+                        .addComponent(salveazaButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addGap(13, 13, 13))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(63, 63, 63)
                         .addComponent(jLabel1)
@@ -180,14 +202,27 @@ public class SectieDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(nrSemestreComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(modificaButton)
-                    .addComponent(adaugaPrStudiuButton)
-                    .addComponent(stergePrStudiuButton)
-                    .addComponent(salveazaButton))
-                .addGap(21, 21, 21))
+                            .addComponent(nrSemestreComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(151, 151, 151))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(modificaButton)
+                            .addComponent(adaugaPrStudiuButton)
+                            .addComponent(stergePrStudiuButton)
+                            .addComponent(cercuriDeStudentiButton))
+                        .addContainerGap(31, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(salveazaButton)
+                            .addComponent(jButton1))
+                        .addContainerGap())))
         );
 
         pack();
@@ -198,13 +233,18 @@ public class SectieDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_nrSemestreComboBoxActionPerformed
 
     private void salveazaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salveazaButtonActionPerformed
-        ok = true;
-        updateSectie();
-        dispose();
+        if (!"".equals(sectieNameField.getText())){
+            ok = true;
+            updateSectie();
+            dispose();
+        }
+        
+        
     }//GEN-LAST:event_salveazaButtonActionPerformed
 
     private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
-       
+       int row = planuriInvTable.getSelectedRow();
+       if (row != -1){
         PlanInv plan = planuriInvTmp.get(planuriInvTable.getSelectedRow());
         
         ProgramDeStudiuDialog diag = new ProgramDeStudiuDialog(plan, true, null, true);
@@ -212,7 +252,9 @@ public class SectieDialog extends javax.swing.JDialog {
         
         if (diag.isOK()) {
             planuriInvTable.setModel(new PlanuriTableModel(planuriInvTmp));
-        }
+        }   
+       }
+        
         
     }//GEN-LAST:event_modificaButtonActionPerformed
 
@@ -231,15 +273,33 @@ public class SectieDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_adaugaPrStudiuButtonActionPerformed
 
     private void stergePrStudiuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergePrStudiuButtonActionPerformed
-       
-        planuriInvTmp.remove(planuriInvTable.getSelectedRow());
+       int row = planuriInvTable.getSelectedRow();
+       if (row != -1){
+        planuriInvTmp.remove(row);
         planuriInvTable.setModel(new PlanuriTableModel(planuriInvTmp));
+       }
+        
         
     }//GEN-LAST:event_stergePrStudiuButtonActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ok = false;
+        dispose();
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cercuriDeStudentiButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cercuriDeStudentiButtonActionPerformed
+
+      
+    }//GEN-LAST:event_cercuriDeStudentiButtonActionPerformed
+    public boolean isOk(){
+        return ok;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adaugaPrStudiuButton;
+    private javax.swing.JButton cercuriDeStudentiButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

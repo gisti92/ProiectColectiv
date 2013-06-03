@@ -17,6 +17,16 @@ public class PlanuriTableModel extends AbstractTableModel {
     private String[] columns = {"Denumire", "Semestru"};
     
     private List<PlanInv> planuri;
+
+    public List<PlanInv> getPlanuri() {
+        return planuri;
+    }
+
+    public void setPlanuri(List<PlanInv> planuri) {
+        this.planuri = planuri;
+    }
+    
+     
     
     public PlanuriTableModel(List<PlanInv> planuri) {
         this.planuri = planuri;

@@ -191,9 +191,12 @@ public class ProgramDeStudiuDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        ok = true;
-        updateDiscipline();
-        dispose();
+        if (!"".equals(denumireaTextField.getText()) && !"".equals(semestrulTextField.getText())){
+            ok = true;
+            updateDiscipline();
+            dispose();    
+        }
+        
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -214,21 +217,27 @@ public class ProgramDeStudiuDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        
-        DisciplinePlan disc = disciplineTmp.get(disciplineTable.getSelectedRow());
-        DisciplinaPlanDialog diag = new DisciplinaPlanDialog(disc, true, null, true);
-        diag.setVisible(true);
-        
-        if (diag.isOk()) {
-            disciplineTable.setModel(new DisciplineTableModel(disciplineTmp));
+        int row = disciplineTable.getSelectedRow();
+        if (row != -1){
+            DisciplinePlan disc = disciplineTmp.get(row);
+            DisciplinaPlanDialog diag = new DisciplinaPlanDialog(disc, true, null, true);
+            diag.setVisible(true);
+
+            if (diag.isOk()) {
+                disciplineTable.setModel(new DisciplineTableModel(disciplineTmp));
+            }    
         }
+        
         
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int row = disciplineTable.getSelectedRow();
+        if (row != -1){
+            disciplineTmp.remove(row);
+            disciplineTable.setModel(new DisciplineTableModel(disciplineTmp));
+        }
         
-        disciplineTmp.remove(disciplineTable.getSelectedRow());
-        disciplineTable.setModel(new DisciplineTableModel(disciplineTmp));
         
     }//GEN-LAST:event_deleteButtonActionPerformed
 

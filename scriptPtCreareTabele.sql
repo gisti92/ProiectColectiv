@@ -313,6 +313,9 @@ EXEC creareTabele
 	CREATE TABLE CercuriStudentesti (
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		denumire VARCHAR(100),
+		mentor VARCHAR(100),
+		an INT,
+		descriere VARCHAR(250),
 		program_id INT
 	)
 

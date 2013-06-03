@@ -22,6 +22,7 @@ import model.director.Proiect.ProjectType;
 import model.director.ResursaFinanciara;
 import model.ResursaLogistica;
 import model.Sala;
+import model.director.CercStudentesc;
 import model.director.Task;
 import model.director.Task.TaskType;
 import model.director.TimeInterval;
@@ -625,6 +626,85 @@ public class DirectorRepositoryDB extends BaseRepository {
         deleteProject(p);
         addProject(p);
     }
+    
+    public List<CercStudentesc> getCercuri() throws SQLException {
+
+        List<CercStudentesc> result = new ArrayList<>();
+
+        String query = "SELECT * FROM CercuriStudentesti ";
+
+        Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+
+            CercStudentesc cerc = new CercStudentesc();
+
+            int id = rs.getInt("id");
+            String denumire = rs.getString("denumire");
+            int an = rs.getInt("an");
+            String mentor = rs.getString("mentor");
+            String descriere = rs.getString("descriere");
+        
+
+            cerc.setId(id);
+            cerc.setDenumire(denumire);
+            cerc.setAn(an);
+            cerc.setDescriere(descriere);
+            
+            cerc.setMentor(mentor);
+
+            result.add(cerc);
+        }
+
+        return result;
+    }
+    
+    
+    public void deleteCercStud(CercStudentesc cerc) throws SQLException {
+
+        Connection con = getConnection();
+        con.setAutoCommit(false);
+
+        
+        try {
+
+            String query = "DELETE FROM Projects WHERE id =  " + cerc.getId();
+
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
+
+            con.commit();
+        } catch (SQLException e) {
+            con.rollback();
+            throw e;
+        }
+    }
+    
+     public void addCercStudentesc(CercStudentesc cerc) throws SQLException {
+        Connection con = getConnection();
+        con.setAutoCommit(false);
+         
+        String query = "INSERT INTO CercuriStudentesti VALUES(?,?,?,?,?,?)";
+        PreparedStatement stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        stmt.setInt(1, cerc.getId());
+        stmt.setInt(6, 0);
+        stmt.setString(2, cerc.getDenumire());
+        stmt.setString(3, cerc.getMentor());
+        stmt.setInt(4, cerc.getAn());
+        stmt.setString(5, cerc.getDescriere());
+        stmt.executeUpdate();
+
+        ResultSet rs = stmt.getGeneratedKeys();
+
+        if (rs.next()) {
+            int id = rs.getInt(1);
+            cerc.setId(id);
+        }
+    }
+
 /*
     public List<ProgramDeStudiuModel> getPrograme() throws SQLException {
 

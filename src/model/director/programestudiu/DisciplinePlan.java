@@ -17,7 +17,7 @@ public class DisciplinePlan {
     private int orePr;
     private String finalizare;
     private int nrCredite;
-
+  
     /**
      * @return the disc
      */

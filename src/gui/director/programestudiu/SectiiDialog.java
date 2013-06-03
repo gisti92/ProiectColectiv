@@ -147,11 +147,13 @@ public class SectiiDialog extends javax.swing.JDialog {
             
             SectieDialog diag = new SectieDialog(model, false, true);
             diag.setVisible(true);
+            if (diag.isOk()){
+                DirectorRepositoryDB.getInstance().insertSectie(model);
+
+                sectii = DirectorRepositoryDB.getInstance().getSectii();
+                sectiiTable.setModel(new SectiiTableModel(sectii));    
+            }
             
-            DirectorRepositoryDB.getInstance().insertSectie(model);
-            
-            sectii = DirectorRepositoryDB.getInstance().getSectii();
-            sectiiTable.setModel(new SectiiTableModel(sectii));
             
         } catch (SQLException ex) {
             Logger.getLogger(SectiiDialog.class.getName()).log(Level.SEVERE, null, ex);
@@ -161,32 +163,42 @@ public class SectiiDialog extends javax.swing.JDialog {
 
     private void modificaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificaButtonActionPerformed
         int row = sectiiTable.getSelectedRow();
-        SectieModel model = sectii.get(row);
-        
-        SectieDialog sectieDialog = new SectieDialog(model, true, true);
-        sectieDialog.setVisible(true);
-        try {
-            DirectorRepositoryDB.getInstance().updateSectie(model);
-            sectii = DirectorRepositoryDB.getInstance().getSectii();
-            sectiiTable.setModel(new SectiiTableModel(sectii));
-        } catch (SQLException ex) {
-            Logger.getLogger(SectiiDialog.class.getName()).log(Level.SEVERE, null, ex);
+        if (row != -1){
+            SectieModel model = sectii.get(row);
+
+            SectieDialog sectieDialog = new SectieDialog(model, true, true);
+            sectieDialog.setVisible(true);
+            if (sectieDialog.isOk()){
+                try {
+                  DirectorRepositoryDB.getInstance().updateSectie(model);
+                  sectii = DirectorRepositoryDB.getInstance().getSectii();
+                  sectiiTable.setModel(new SectiiTableModel(sectii));
+              } catch (SQLException ex) {
+                  Logger.getLogger(SectiiDialog.class.getName()).log(Level.SEVERE, null, ex);
+              }
+            }
+            
         }
+        
         
     }//GEN-LAST:event_modificaButtonActionPerformed
 
     private void stergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stergeButtonActionPerformed
         
         int row = sectiiTable.getSelectedRow();
-        SectieModel model = sectii.get(row);
-        try {
-            DirectorRepositoryDB.getInstance().deleteSectie(model);
-            
-            sectii = DirectorRepositoryDB.getInstance().getSectii();
-            sectiiTable.setModel(new SectiiTableModel(sectii));
-        } catch (SQLException ex) {
-            Logger.getLogger(SectiiDialog.class.getName()).log(Level.SEVERE, null, ex);
+        if (row != -1){
+            SectieModel model = sectii.get(row);
+            try {
+                DirectorRepositoryDB.getInstance().deleteSectie(model);
+
+                sectii = DirectorRepositoryDB.getInstance().getSectii();
+                sectiiTable.setModel(new SectiiTableModel(sectii));
+            } catch (SQLException ex) {
+                Logger.getLogger(SectiiDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
+        
     }//GEN-LAST:event_stergeButtonActionPerformed
 
     
